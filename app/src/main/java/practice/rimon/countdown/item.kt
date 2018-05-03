@@ -5,7 +5,7 @@ package practice.rimon.countdown
  */
 class Item: java.io.Serializable  {
 
-    var id:Long=0
+    var id:Long=0  //資料庫的唯一編號unique
     var item_icon: Int=0
     var item_title:String="default"
     var daysbetween:Int=333

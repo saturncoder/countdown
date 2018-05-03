@@ -7,6 +7,7 @@ import android.support.design.widget.NavigationView
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.helper.ItemTouchHelper
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -16,8 +17,9 @@ import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
-    //取得一個實例，時間為現在時間
-    val FAB_ADDITEM_REQUEST_CODE=1
+
+    val FAB_addITEM_REQUEST_CODE=1
+    val editItem_REQUEST_CODE=2
     lateinit var toggle:ActionBarDrawerToggle
 
     val mydata=ArrayList<Item>()
@@ -68,7 +70,15 @@ class MainActivity : AppCompatActivity() {
         }
         //載入database所有item
         mydata.addAll(itemDAO.all)
-        myadapter=myAdapter(mydata,gridlayoutmanager)
+
+        myadapter=myAdapter(mydata,gridlayoutmanager,recyclerview,itemDAO,{ position:Int->
+            Log.e("clicklistener", "Clicked on item $position")
+            itemClickHandler(position)
+        })
+        val callback=ItemTouchHelperCallback(myadapter)
+        val itemTouchHelper= ItemTouchHelper(callback)
+        itemTouchHelper.attachToRecyclerView(recyclerview)
+
         recyclerview.adapter= myadapter
 
         FAB_additem.setOnClickListener(FabClickListener)
@@ -83,8 +93,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val FabClickListener=View.OnClickListener {
-        val intent=Intent(this,ItemActivity::class.java)
-        startActivityForResult(intent,FAB_ADDITEM_REQUEST_CODE)
+        val intent=Intent("practice.rimon.countdown.ADD_ITEM")
+        startActivityForResult(intent,FAB_addITEM_REQUEST_CODE)
     }
     private val navigationItemSelectedListener = NavigationView.OnNavigationItemSelectedListener { menuItem ->
         Log.e("selectDrawerItem","on ${menuItem.itemId}")
@@ -105,21 +115,45 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode==FAB_ADDITEM_REQUEST_CODE && resultCode== Activity.RESULT_OK){
-            // 讀取物件
-            val item = data!!.extras.getSerializable(
-                    "countdown.Item") as Item
+
+        //新增
+        if(requestCode==FAB_addITEM_REQUEST_CODE && resultCode== Activity.RESULT_OK){
+            // 讀取物件  (放裡面避免返回時data是null)
+            val item = data!!.extras.getSerializable("countdown.Item") as Item
             // 新增資料到資料庫
             val itemNew : Item = itemDAO.insert(item)
             // 讀出物件的編號
             item.id = itemNew.id
-
+            println(item.id)
             // 加入新增的記事物件
             mydata.add(item)
 
-            // 通知資料改變
-            myadapter.notifyDataSetChanged()
         }
+        else if (requestCode==editItem_REQUEST_CODE && resultCode== Activity.RESULT_OK){
+            // 讀取物件
+            val item = data!!.extras.getSerializable("countdown.Item") as Item
+            val position=data.extras.getInt("array_position")
+            // 更新資料庫物件
+            itemDAO.update(item)
+            //
+
+            // 加入的記事物件
+            mydata.set(position,item)
+
+        }
+        // 通知資料改變
+        myadapter.notifyDataSetChanged()
+
+    }
+
+    private fun itemClickHandler(position:Int){
+     println("item ${position+1} clicked")
+
+        val intent=Intent("practice.rimon.countdown.EDIT_ITEM")
+        val itemclicked=mydata[position]
+        intent.putExtra("itemclicked",itemclicked)
+        intent.putExtra("array_position",position)
+        startActivityForResult(intent,editItem_REQUEST_CODE)
 
     }
 }

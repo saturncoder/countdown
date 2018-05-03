@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
@@ -15,14 +16,30 @@ import org.joda.time.LocalDate
 import java.util.*
 
 class ItemActivity : AppCompatActivity() {
+    //取得一個實例，時間為現在時間
     val calendar= Calendar.getInstance()
     val localdate_now= LocalDate.now()
     var item=Item()
     var daysbetween:Int=0
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_item)
         JodaTimeAndroid.init(this)
+
+        val action=intent.action //oncreate完才抓的到
+
+        if(action=="practice.rimon.countdown.EDIT_ITEM"){
+            val itemselected=intent.getSerializableExtra("itemclicked") as Item
+           Log.e("item","$itemselected")
+            item.id=itemselected.id
+
+            editText_item_title.setText(itemselected.item_title)
+            textView_item_daysbetween.text = itemselected.daysbetween.toString()
+        }
+
 
         textView_item_eventTime.setOnClickListener(eventTimeOnClickListener)
     }
@@ -33,7 +50,7 @@ class ItemActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if (item!!.itemId == R.id.confirm) {
-        additem()
+           additem()
             finish()
         return true
     }
@@ -68,6 +85,7 @@ class ItemActivity : AppCompatActivity() {
     }
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
+            //crash
             // 設定回應結果為取消
             setResult(Activity.RESULT_CANCELED, intent)
         }

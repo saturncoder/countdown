@@ -73,12 +73,12 @@ class ItemDAO(context: Context) {
         // 加入ContentValues物件包裝的新增資料
         itemToContentValues(item, cv)
 
-        // 新增一筆資料並取得編號  (return _id)
+        // 新增一筆資料並取得編號  (return _id)  從1開始
         // 第一個參數是表格名稱
         // 第二個參數是沒有指定欄位值的預設值
         // 第三個參數是包裝新增資料的ContentValues物件
         val id = db.insert(TABLE_NAME, null, cv)
-println(id)
+        println(id)
         // 設定編號
         item.id = id
         // 回傳結果

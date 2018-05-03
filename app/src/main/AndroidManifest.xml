@@ -17,9 +17,13 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ItemActivity"
-
-        />
+        <activity android:name=".ItemActivity">
+        <intent-filter>
+            <action android:name="practice.rimon.countdown.ADD_ITEM" />
+            <action android:name="practice.rimon.countdown.EDIT_ITEM" />
+            <category android:name="android.intent.category.DEFAULT" />
+        </intent-filter>
+        </activity>
     </application>
 
 </manifest>
