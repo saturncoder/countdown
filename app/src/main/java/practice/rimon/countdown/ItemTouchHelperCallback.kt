@@ -8,11 +8,25 @@ import android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_SWIPE
 import kotlinx.android.synthetic.main.layout_item_list.view.*
 
 class ItemTouchHelperCallback(val touchAdapter:ItemTouchHelperAdapter): ItemTouchHelper.Callback() {
+
+    override fun isLongPressDragEnabled(): Boolean {
+        return super.isLongPressDragEnabled()
+    }
+
     //設置允許手勢行為
     override fun getMovementFlags(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?): Int {
-        val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN        //允許上下拖動
-        val swipeFlags = ItemTouchHelper.START    //允許右到左滑動 or ItemTouchHelper.END
-        return ItemTouchHelper.Callback.makeMovementFlags(dragFlags, swipeFlags)
+            val spancount=viewHolder!!.itemViewType
+
+        if(spancount==1) {
+            val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN        //允許上下拖動
+            val swipeFlags = ItemTouchHelper.START    //允許右到左滑動 or ItemTouchHelper.END
+            return ItemTouchHelper.Callback.makeMovementFlags(dragFlags, swipeFlags)
+        }
+        else{
+            val dragFlags = 0        //不允許上下拖動 ACTION_STATE_IDLE
+            val swipeFlags = 0    //不允許左右滑動
+            return ItemTouchHelper.Callback.makeMovementFlags(dragFlags, swipeFlags)
+        }
     }
     //拖曳行為 換位置
     override fun onMove(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?, target: RecyclerView.ViewHolder?): Boolean {
@@ -25,10 +39,8 @@ class ItemTouchHelperCallback(val touchAdapter:ItemTouchHelperAdapter): ItemTouc
     //滑動行為
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder?, direction: Int) {
         if (viewHolder!=null) {
-            println(viewHolder.adapterPosition)
+
             touchAdapter.onSwiped(viewHolder, direction, viewHolder.adapterPosition)
-
-
         }
     }
     //項目被選中且在移動時

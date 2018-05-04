@@ -157,9 +157,11 @@ class ItemDAO(context: Context) {
     fun createSampleData() {
         val item = Item(0, R.drawable.test, "考試", 32)
         val item2 = Item(0, R.drawable.test, "回家", 112)
+        val item3 = Item(0, R.drawable.test, "旅遊", 53)
 
         insert(item)
         insert(item2)
+        insert(item3)
     }
 
 }
