@@ -5,22 +5,25 @@ package practice.rimon.countdown
  */
 class Item: java.io.Serializable  {
 
-    var id:Long=0  //資料庫的唯一編號unique
+    var id:Long=0  //資料庫的唯一編號 unique
     var item_icon: Int=0
     var item_title:String="default"
-    var daysbetween:Int=333
+    var eventDatetime:Long=0
+    var alarmDatetime:Long=0
 
     constructor() {
         item_icon = R.drawable.test
         item_title ="ddefault"
-        daysbetween=222
+        eventDatetime=0L
+        alarmDatetime=0L
     }
 
-    constructor(id: Long, item_icon:Int, item_title:String, daysbetween:Int) {
+    constructor(id: Long, item_icon:Int, item_title:String, eventDatetime:Long,alarmDatetime:Long) {
         this.id = id
         this.item_icon=item_icon
         this.item_title=item_title
-        this.daysbetween = daysbetween
+        this.eventDatetime = eventDatetime
+        this.alarmDatetime=alarmDatetime
 
     }
 }

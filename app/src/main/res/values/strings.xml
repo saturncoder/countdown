@@ -2,4 +2,25 @@
     <string name="app_name">countdown</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string-array name="notify_minutes_array">
+        <item>五分鐘</item>
+        <item>十分鐘</item>
+        <item>二十分鐘</item>
+
+    </string-array>
+
+    <string-array name="notify_minutes_value_array">
+        <item>5</item>
+        <item>10</item>
+        <item>20</item>
+
+    </string-array>
+    <string-array name="reminder_interval">
+        <item>每日</item>
+        <item>每周</item>
+        <item>每月</item>
+        <item>每年</item>
+        <item>當天</item>
+    </string-array>
 </resources>

@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(){
 
     val FAB_addITEM_REQUEST_CODE=1
     val editItem_REQUEST_CODE=2
@@ -41,6 +41,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if(item!!.itemId == R.id.switchLayout){
+
             if(gridlayoutmanager.spanCount==1) {
                 gridlayoutmanager.spanCount = 2
                 //item.setIcon(R.drawable.icon_menu_1)
@@ -62,9 +63,10 @@ class MainActivity : AppCompatActivity() {
     }
     private fun setup(){
 
+
         recyclerview.layoutManager=gridlayoutmanager
         // 如果資料庫是空的，就建立一些範例資料
-        // 這是為了方便測試用的，完成應用程式以後可以拿掉
+
         if (itemDAO.count == 0) {
             itemDAO.createSampleData()
         }
@@ -101,7 +103,9 @@ class MainActivity : AppCompatActivity() {
 
 
         when(menuItem.itemId) {
-            R.id.item1-> { }
+            R.id.settings-> {
+                startActivity(Intent(this, PrefActivity::class.java))
+            }
 
         }
 
@@ -156,4 +160,6 @@ class MainActivity : AppCompatActivity() {
         startActivityForResult(intent,editItem_REQUEST_CODE)
 
     }
+
+
 }

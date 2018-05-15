@@ -113,12 +113,15 @@ class myAdapter(val mydata:ArrayList<Item>,
             when (viewType){
                 1->{
                     itemView.textView_itemTitle_list.text=item.item_title
-                    itemView.textView_itemDaysBetween_list.text=item.daysbetween.toString()
-                    itemView.imageView_itemIcon.setImageResource(item.item_icon)
+                    val daysbetween= timeToDays(item.eventDatetime)
+                    itemView.textView_itemDaysBetween_list.text=daysbetween.toString()
+                    //會有問題  要改掉
+                    //itemView.imageView_itemIcon.setImageResource(item.item_icon)
                 }
                 2->{
                     itemView.textView_itemTitle_grid.text=item.item_title
-                    itemView.textView_itemDaysBetween_grid.text=item.daysbetween.toString()
+                    val daysbetween= timeToDays(item.eventDatetime)
+                    itemView.textView_itemDaysBetween_grid.text=daysbetween.toString()
                 }
             }
         }

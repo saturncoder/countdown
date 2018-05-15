@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <SwitchPreference
+        android:key="DEFAULT_NOTIFY"
+        android:title="提醒"
+        android:summary="是否於每日00:00提醒">
+    </SwitchPreference>
+
+    <ListPreference
+        android:key="NOTIFY_MINUTES"
+        android:title="default_notify"
+        android:summary="default_notify_summary"
+        android:entries="@array/notify_minutes_array"
+        android:entryValues="@array/notify_minutes_value_array"
+        android:defaultValue="5" />
+</PreferenceScreen>

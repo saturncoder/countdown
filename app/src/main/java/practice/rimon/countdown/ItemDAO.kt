@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
+import android.util.Log
 import java.util.*
 
 // 資料功能類別
@@ -19,14 +20,16 @@ class ItemDAO(context: Context) {
         // 其它表格欄位名稱
         val ICON_COLUMN = "icon"
         val TITLE_COLUMN = "title"
-        val DAYSBETWEEN_COLUMN = "daysbetween"
+        val EVENTDATETIME_COLUMN = "eventdatetime"
+        val ALARMDATETIME_COLUMN = "alarmdatetime"
 
         // 使用上面宣告的變數建立表格的SQL敘述
         val CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
                 KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 ICON_COLUMN + " INTEGER NOT NULL, " +
                 TITLE_COLUMN + " TEXT NOT NULL, " +
-                DAYSBETWEEN_COLUMN + " INTEGER NOT NULL)"
+                EVENTDATETIME_COLUMN + " INTEGER NOT NULL,"+
+                ALARMDATETIME_COLUMN + " INTEGER)"
     }
 
     // 資料庫物件 writableDatabase
@@ -78,7 +81,7 @@ class ItemDAO(context: Context) {
         // 第二個參數是沒有指定欄位值的預設值
         // 第三個參數是包裝新增資料的ContentValues物件
         val id = db.insert(TABLE_NAME, null, cv)
-        println(id)
+        Log.i("newItemID:","$id")
         // 設定編號
         item.id = id
         // 回傳結果
@@ -106,7 +109,8 @@ class ItemDAO(context: Context) {
         cv.put(ICON_COLUMN, item.id)
         cv.put(ICON_COLUMN, item.item_icon)
         cv.put(TITLE_COLUMN, item.item_title)
-        cv.put(DAYSBETWEEN_COLUMN, item.daysbetween)
+        cv.put(EVENTDATETIME_COLUMN, item.eventDatetime)
+        cv.put(ALARMDATETIME_COLUMN, item.alarmDatetime)
     }
 
     // 刪除指定參數編號的資料
@@ -144,20 +148,20 @@ class ItemDAO(context: Context) {
         // 準備回傳結果用的物件
         val result = Item()
 
-        result.id = cursor.getLong(0)
+        result.id = cursor.getLong(0) //注意欄位編號
         result.item_icon = cursor.getInt(1)
         result.item_title = cursor.getString(2)
-        result.daysbetween = cursor.getInt(3)
-
+        result.eventDatetime = cursor.getLong(3)
+        result.alarmDatetime = cursor.getLong(4)
         // 回傳結果
         return result
     }
 
     // 建立範例資料
     fun createSampleData() {
-        val item = Item(0, R.drawable.test, "考試", 32)
-        val item2 = Item(0, R.drawable.test, "回家", 112)
-        val item3 = Item(0, R.drawable.test, "旅遊", 53)
+        val item = Item(0, R.drawable.test, "考試", 1526309999410,0)
+        val item2 = Item(0, R.drawable.test, "回家", 1526109999410,0)
+        val item3 = Item(0, R.drawable.test, "旅遊", 1536109999410,0)
 
         insert(item)
         insert(item2)
