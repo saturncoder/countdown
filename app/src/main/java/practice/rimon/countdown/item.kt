@@ -10,20 +10,28 @@ class Item: java.io.Serializable  {
     var item_title:String="default"
     var eventDatetime:Long=0
     var alarmDatetime:Long=0
+    var alarmAt:Long=0
+    var alarmInterval:Long=0
 
     constructor() {
         item_icon = R.drawable.test
-        item_title ="ddefault"
+        item_title ="default"
         eventDatetime=0L
         alarmDatetime=0L
+        alarmAt=0L
+        alarmInterval=0L
+
     }
 
-    constructor(id: Long, item_icon:Int, item_title:String, eventDatetime:Long,alarmDatetime:Long) {
+    constructor(id: Long, item_icon:Int, item_title:String, eventDatetime:Long
+                ,alarmDatetime:Long, alarmAt:Long, alarmInterval:Long) {
         this.id = id
         this.item_icon=item_icon
         this.item_title=item_title
         this.eventDatetime = eventDatetime
         this.alarmDatetime=alarmDatetime
+        this.alarmAt=alarmAt
+        this.alarmInterval=alarmInterval
 
     }
 }

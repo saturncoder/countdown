@@ -22,6 +22,8 @@ class ItemDAO(context: Context) {
         val TITLE_COLUMN = "title"
         val EVENTDATETIME_COLUMN = "eventdatetime"
         val ALARMDATETIME_COLUMN = "alarmdatetime"
+        val ALARMAT_COLUMN="alarmat"
+        val ALARMINTERVAL_COLUMN="alarminterval"
 
         // 使用上面宣告的變數建立表格的SQL敘述
         val CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
@@ -29,7 +31,9 @@ class ItemDAO(context: Context) {
                 ICON_COLUMN + " INTEGER NOT NULL, " +
                 TITLE_COLUMN + " TEXT NOT NULL, " +
                 EVENTDATETIME_COLUMN + " INTEGER NOT NULL,"+
-                ALARMDATETIME_COLUMN + " INTEGER)"
+                ALARMDATETIME_COLUMN + " INTEGER NOT NULL,"+
+                ALARMAT_COLUMN + " INTEGER NOT NULL,"+
+                ALARMINTERVAL_COLUMN + " INTEGER NOT NULL)"
     }
 
     // 資料庫物件 writableDatabase
@@ -111,6 +115,8 @@ class ItemDAO(context: Context) {
         cv.put(TITLE_COLUMN, item.item_title)
         cv.put(EVENTDATETIME_COLUMN, item.eventDatetime)
         cv.put(ALARMDATETIME_COLUMN, item.alarmDatetime)
+        cv.put(ALARMAT_COLUMN,item.alarmAt)
+        cv.put(ALARMINTERVAL_COLUMN,item.alarmInterval)
     }
 
     // 刪除指定參數編號的資料
@@ -153,15 +159,17 @@ class ItemDAO(context: Context) {
         result.item_title = cursor.getString(2)
         result.eventDatetime = cursor.getLong(3)
         result.alarmDatetime = cursor.getLong(4)
+        result.alarmAt=cursor.getLong(5)
+        result.alarmInterval=cursor.getLong(6)
         // 回傳結果
         return result
     }
 
     // 建立範例資料
     fun createSampleData() {
-        val item = Item(0, R.drawable.test, "考試", 1526309999410,0)
-        val item2 = Item(0, R.drawable.test, "回家", 1526109999410,0)
-        val item3 = Item(0, R.drawable.test, "旅遊", 1536109999410,0)
+        val item = Item(0, R.drawable.test, "考試", 1527509900000,0,0,0)
+        val item2 = Item(0, R.drawable.test, "回家", 1522509900000,0,0,0)
+        val item3 = Item(0, R.drawable.test, "旅遊", 1522508900000,0,0,0)
 
         insert(item)
         insert(item2)

@@ -34,12 +34,22 @@ class ItemActivity : AppCompatActivity() {
     var eventDate_mills:Long=0
     //顯示的日期格式 (若換地區有問題可能是這裡出問題)
     val timeFormat = SimpleDateFormat("yyyy-MM-dd",Locale.getDefault())
-    val remindertimeFormat = SimpleDateFormat("hh:mm",Locale.getDefault())
+    val remindertimeFormat = SimpleDateFormat("HH:mm",Locale.getDefault())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_item)
         JodaTimeAndroid.init(this)
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        registerListener()//注意順序 clickable etc
+
+        //預設第一次提醒時間 隔天00:00
+        reminder.roll(Calendar.DAY_OF_MONTH,1)
+        reminder.set(Calendar.HOUR_OF_DAY,0)
+        reminder.set(Calendar.MINUTE,0)
+        reminder.set(Calendar.SECOND,0)
+        item.alarmAt=reminder.timeInMillis//存入預設值
+        Log.e("預設提醒時間(隔天凌晨)","${reminder.time}")
 
         //看是編輯還是新增
         val action=intent.action //oncreate完才抓的到
@@ -64,15 +74,30 @@ class ItemActivity : AppCompatActivity() {
             eventDate.timeInMillis=itemselected.eventDatetime
             Log.e("事件日期","${eventDate.time}")
 
+            //判斷若已有設提醒
+            //檢查提醒若已過期，則不須設置提醒
+            Log.e("事件已儲存提醒日期","${itemselected.alarmDatetime}")
+            if (itemselected.alarmDatetime!=0L && eventDate.timeInMillis-23L*60L*60L*1000L>calendar.timeInMillis){
+                switch_reminder.isChecked=true
+                item.alarmDatetime=itemselected.alarmDatetime
+                reminder_interval.isClickable=true
+                reminder_time.isClickable=true
+                reminder_interval.setTextColor(Color.BLACK)
+                reminder_time.setTextColor(Color.BLACK)
+                //讀出已設定的提醒時間(日期可能是錯的)
+                val selectedAlarmat=Calendar.getInstance()
+                selectedAlarmat.timeInMillis=itemselected.alarmAt
+                reminder_time.text=remindertimeFormat.format(selectedAlarmat.time)
+                //若未更改就直接儲存
+                item.alarmAt=itemselected.alarmAt
+                //提醒預設值改為已儲存提醒時間
+                reminder.set(Calendar.HOUR_OF_DAY,selectedAlarmat.get(Calendar.HOUR_OF_DAY))
+                reminder.set(Calendar.MINUTE,selectedAlarmat.get(Calendar.MINUTE))
+
+            }
         }
 
-        registerListener()
-        //預設提醒時間 隔天00:00
-        reminder.roll(Calendar.DAY_OF_MONTH,1)
-        reminder.set(Calendar.HOUR_OF_DAY,0)
-        reminder.set(Calendar.MINUTE,0)
-        reminder.set(Calendar.SECOND,0)
-        Log.e("預設提醒時間(隔天凌晨)","${reminder.time}")
+
     }
     private fun registerListener(){
         textView_item_eventTime.setOnClickListener(eventTimeOnClickListener)
@@ -90,8 +115,12 @@ class ItemActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if (item!!.itemId == R.id.confirm) {
            comfirmItem()
-        return true
-    }
+            return true
+        }
+        else if(item.itemId==android.R.id.home){
+            onBackPressed()
+            return true
+        }
         return super.onOptionsItemSelected(item)
     }
     //事件時間
@@ -134,6 +163,7 @@ class ItemActivity : AppCompatActivity() {
             setNotification()
             finish()
         }
+        println(item.alarmDatetime)
     }
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -147,18 +177,20 @@ class ItemActivity : AppCompatActivity() {
 
     //提醒時間
     private val reminderTimeOnClickListener=View.OnClickListener {view->
-        val timePickerDialog=TimePickerDialog(this, android.R.style.Theme_Holo_Light_Dialog,timeSetListner,0,0,true)
+        val timePickerDialog=TimePickerDialog(this, android.R.style.Theme_Holo_Light_Dialog,timeSetListener,0,0,true)
         timePickerDialog.window.setBackgroundDrawableResource(android.R.color.transparent)
         timePickerDialog.setTitle("選擇提醒時間:")
         timePickerDialog.show()
     }
-    private val timeSetListner=TimePickerDialog.OnTimeSetListener{view,hourofday,minute->
+    private val timeSetListener=TimePickerDialog.OnTimeSetListener{view,hourofday,minute->
         //第一次提醒時間 今天的XX:XX  預設是隔天00:00
         reminder.set(Calendar.HOUR_OF_DAY,hourofday)
         reminder.set(Calendar.MINUTE,minute)
         reminder.set(Calendar.SECOND,0)
-        println(reminder.time)
+        Log.e("使用者選擇的提醒時間(第一次)","${reminder.time}")
         reminder_time.text=remindertimeFormat.format(reminder.time)
+        //存入
+        item.alarmAt=reminder.timeInMillis
     }
     //提醒間距 還沒做
     private val reminderIntervalOnClickListener=View.OnClickListener {
@@ -186,9 +218,9 @@ class ItemActivity : AppCompatActivity() {
         sharedPrefEditor.putInt("selectedInterval", i)
         sharedPrefEditor.apply()
     }
+    //提醒開關，決定alarmDatetime是否為0(是否關閉)
     private val reminderSwitchListener= CompoundButton.OnCheckedChangeListener{buttonView,isChecked->
         if(isChecked){
-
             reminder_interval.isClickable=true
             reminder_time.isClickable=true
             reminder_interval.setTextColor(Color.BLACK)
@@ -241,5 +273,15 @@ class ItemActivity : AppCompatActivity() {
 
         }
         //沒提醒要把原本註冊的提醒關掉
+        else{
+            val cancellationIntent = Intent(this, CancelAlarmReceiver::class.java)
+            cancellationIntent.putExtra("item_id", item.id)
+            val broadcastCODE = item.id.toInt()
+            val cancellationPendingIntent = PendingIntent.getBroadcast(this, broadcastCODE, cancellationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+            val am = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            am.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, cancellationPendingIntent)
+            Log.e("註銷已註冊提醒", "${calendar.time}")
+        }
+
     }
 }

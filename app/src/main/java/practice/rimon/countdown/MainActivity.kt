@@ -7,6 +7,7 @@ import android.support.design.widget.NavigationView
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.util.Log
 import android.view.Menu
@@ -92,6 +93,19 @@ class MainActivity : AppCompatActivity(){
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         navigation_view.setNavigationItemSelectedListener(navigationItemSelectedListener)
+        recyclerview.addOnScrollListener(object :RecyclerView.OnScrollListener(){
+            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+                if ( dy >0  && FAB_additem.isShown)
+                    FAB_additem.hide()
+            }
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE){
+                    FAB_additem.show()
+                }
+                super.onScrollStateChanged(recyclerView, newState)
+            }
+        })
     }
 
     private val FabClickListener=View.OnClickListener {
@@ -143,7 +157,7 @@ class MainActivity : AppCompatActivity(){
 
             // 加入的記事物件
             mydata.set(position,item)
-
+            Log.e("有無設置提醒","${item.alarmDatetime}")
         }
         // 通知資料改變
         myadapter.notifyDataSetChanged()

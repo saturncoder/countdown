@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context="practice.rimon.countdown.MainActivity">
 
-    <android.support.constraint.ConstraintLayout
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -15,11 +15,7 @@
             android:id="@+id/recyclerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:scrollbars="vertical">
 
         </android.support.v7.widget.RecyclerView>
 
@@ -27,14 +23,13 @@
             android:id="@+id/FAB_additem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:clickable="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/ic_add_white_24dp" />
-    </android.support.constraint.ConstraintLayout>
+            android:src="@drawable/ic_add_white_24dp" />
+    </android.support.design.widget.CoordinatorLayout>
 
     <android.support.design.widget.NavigationView
         android:id="@+id/navigation_view"
