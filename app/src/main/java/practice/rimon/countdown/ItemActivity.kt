@@ -1,25 +1,30 @@
 package practice.rimon.countdown
 
-import android.app.*
-import android.content.Context
-import android.content.Intent
+import android.app.Activity
+import android.app.AlertDialog
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.graphics.Color
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.support.v7.app.AppCompatActivity
+import android.text.InputType
 import android.text.TextUtils
 import android.util.Log
 import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.widget.ArrayAdapter
 import android.widget.CompoundButton
+import android.widget.EditText
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_item.*
 import net.danlew.android.joda.JodaTimeAndroid
 import java.text.SimpleDateFormat
 import java.util.*
-
+import kotlin.collections.ArrayList
 
 
 class ItemActivity : AppCompatActivity() {
@@ -30,6 +35,9 @@ class ItemActivity : AppCompatActivity() {
     val reminder=Calendar.getInstance()//提醒時間
     //要用來回傳的空item
     var item=Item()
+    //要用來讀出已儲存分類的陣列
+    var stored_category=ArrayList<String>()
+
 
     var eventDate_mills:Long=0
     //顯示的日期格式 (若換地區有問題可能是這裡出問題)
@@ -41,15 +49,22 @@ class ItemActivity : AppCompatActivity() {
         setContentView(R.layout.activity_item)
         JodaTimeAndroid.init(this)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        registerListener()//注意順序 clickable etc
 
+        //讀出已儲存 分類陣列
+        stored_category=getArrayList("category",this)
+        println(stored_category)
+
+
+        registerListener()//注意順序 clickable etc
+        //清空category
+        //PreferenceManager.getDefaultSharedPreferences(this).edit().remove("category").apply()
         //預設第一次提醒時間 隔天00:00
         reminder.roll(Calendar.DAY_OF_MONTH,1)
         reminder.set(Calendar.HOUR_OF_DAY,0)
         reminder.set(Calendar.MINUTE,0)
         reminder.set(Calendar.SECOND,0)
         item.alarmAt=reminder.timeInMillis//存入預設值
-        Log.e("預設提醒時間(隔天凌晨)","${reminder.time}")
+        Log.e("預設提醒時間(隔天凌晨) alarmAt","${reminder.time}")
 
         //看是編輯還是新增
         val action=intent.action //oncreate完才抓的到
@@ -66,13 +81,19 @@ class ItemActivity : AppCompatActivity() {
             textView_item_eventTime.text=timeFormat.format(cal_eventTime.time)
             //以儲存時間推算事件剩餘天數
             val daysbetween =timeToDays(itemselected.eventDatetime)
-            textView_item_daysbetween.text=daysbetween.toString()
+            textView_item_daysbetween.text="$daysbetween 天"
+            //讀出已儲存分類
+            textView_item_category.text=stored_category[itemselected.category]
+            //讀出已儲存備忘錄
+            editText_memo.setText(itemselected.memo)
 
             //若未更改時間，儲存原本時間
             item.eventDatetime=itemselected.eventDatetime
             //若未更改時間，事件時間就是reminder到期時間
             eventDate.timeInMillis=itemselected.eventDatetime
             Log.e("事件日期","${eventDate.time}")
+            //若未更改分類，儲存原來分類
+            item.category=itemselected.category
 
             //判斷若已有設提醒
             //檢查提醒若已過期，則不須設置提醒
@@ -101,11 +122,14 @@ class ItemActivity : AppCompatActivity() {
     }
     private fun registerListener(){
         textView_item_eventTime.setOnClickListener(eventTimeOnClickListener)
+        textView_item_category.setOnClickListener(categoryOnClickListener)
         reminder_interval.setOnClickListener(reminderIntervalOnClickListener)
         reminder_time.setOnClickListener(reminderTimeOnClickListener)
         switch_reminder.setOnCheckedChangeListener(reminderSwitchListener)
         reminder_interval.isClickable=false //xml設無效 還是能點
         reminder_time.isClickable=false
+        editText_memo.imeOptions=EditorInfo.IME_ACTION_DONE
+        editText_memo.setRawInputType(InputType.TYPE_CLASS_TEXT)
     }
     //右上menu
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -137,10 +161,28 @@ class ItemActivity : AppCompatActivity() {
         //儲存事件時間(millis)
         eventDate_mills=eventDate.timeInMillis
         item.eventDatetime=eventDate_mills
+        //若提醒已開且日期未過期，要存提醒時間
+        if(switch_reminder.isChecked) {
+            item.alarmDatetime = item.eventDatetime
+            //若選擇的日期是過去的時間，則不能設提醒
+            if(item.alarmDatetime-23L*60L*60L*1000L<=calendar.timeInMillis){
+                Toast.makeText(this,"過期事件無法設置提醒",Toast.LENGTH_LONG).show()
+                switch_reminder.isChecked=false
+                reminder_interval.isClickable=false
+                reminder_time.isClickable=false
+                reminder_interval.setTextColor(Color.GRAY)
+                reminder_time.setTextColor(Color.GRAY)
+                //關閉提醒
+                item.alarmDatetime=0L
+            }
+        }
         //更新剩餘天數
         val daysbetween= timeToDays(eventDate_mills)
-        textView_item_daysbetween.text=daysbetween.toString()
+        textView_item_daysbetween.text="$daysbetween 天"
 
+        if(switch_reminder.isChecked) {
+            switch_reminder.isChecked = false
+        }
     }
 
     private fun comfirmItem(){
@@ -155,12 +197,13 @@ class ItemActivity : AppCompatActivity() {
         else {
             item.item_icon = R.drawable.test
             item.item_title = editText_item_title.text.toString()
+            item.memo=editText_memo.text.toString()
 
             println("press OK button")
             intent.putExtra("countdown.Item", item)
             setResult(Activity.RESULT_OK, intent)
             //關掉頁面
-            setNotification()
+
             finish()
         }
         println(item.alarmDatetime)
@@ -218,6 +261,61 @@ class ItemActivity : AppCompatActivity() {
         sharedPrefEditor.putInt("selectedInterval", i)
         sharedPrefEditor.apply()
     }
+    //按下選擇分類鍵
+    private val categoryOnClickListener=View.OnClickListener{
+
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("選擇分類")
+        //用來給選單顯示的adapter
+        val arrayAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_single_choice)
+        //加入已儲存分類
+        for(i in stored_category){
+            arrayAdapter.add(i)
+        }
+        arrayAdapter.add("新增分類...")
+
+        builder.setSingleChoiceItems(arrayAdapter,item.category,{dialogInterface, i ->
+            //如果選擇最後一個(新增分類...)
+            if(i==arrayAdapter.count-1){
+                //跳出新增視窗
+                val builerinner = AlertDialog.Builder(this)
+                val edittext = EditText(this)
+                edittext.setSingleLine(true)
+                builerinner.setTitle("新增分類名稱")
+                builerinner.setView(edittext)
+
+                builerinner.setPositiveButton("確定") { dialog, whichButton ->
+                   val newcategory = edittext.text.toString()
+                    //插到倒數第二個
+                    arrayAdapter.insert(newcategory,arrayAdapter.count-1)
+                    arrayAdapter.notifyDataSetChanged()
+                    //存入自訂分類陣列
+                    stored_category.add(newcategory)
+                    //存入sharedpref
+                    saveArrayList(stored_category,"category",this)
+
+                }
+
+                builerinner.setNegativeButton("取消") { dialog, whichButton ->  }
+
+                builerinner.show()
+            }
+            else{
+                textView_item_category.text=arrayAdapter.getItem(i).toString()
+                //存入item
+                item.category=i
+                dialogInterface.dismiss()
+            }
+
+        })
+
+        builder.show()
+
+
+    }
+
+
+
     //提醒開關，決定alarmDatetime是否為0(是否關閉)
     private val reminderSwitchListener= CompoundButton.OnCheckedChangeListener{buttonView,isChecked->
         if(isChecked){
@@ -249,39 +347,9 @@ class ItemActivity : AppCompatActivity() {
             item.alarmDatetime=0L
         }
     }
-    private fun setNotification(){
-        //若有開啟提醒則設置提醒
-        if(item.alarmDatetime!=0L){
-            //檢查事件是否過期
 
-                val intent = Intent(this, AlarmReceiver::class.java)
-                intent.putExtra("title", item.item_title)
-                intent.putExtra("item_id", item.id)
-                val broadcastCODE = item.id.toInt()
-                Log.e("提醒的requestcode", "$broadcastCODE")
-                val pendingIntent = PendingIntent.getBroadcast(this, broadcastCODE, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-                //註冊第一次提醒時間
-                val am = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-                am.setInexactRepeating(AlarmManager.RTC_WAKEUP, reminder.timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent)
-                Log.e("第一次提醒時間", "${reminder.time}")
-                //註冊提醒到期時間
-                val cancellationIntent = Intent(this, CancelAlarmReceiver::class.java)
-                cancellationIntent.putExtra("item_id", item.id)
-                val cancellationPendingIntent = PendingIntent.getBroadcast(this, broadcastCODE, cancellationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-                am.set(AlarmManager.RTC_WAKEUP, item.alarmDatetime, cancellationPendingIntent)
-                Log.e("提醒到期時間", "${eventDate.time}")
 
-        }
-        //沒提醒要把原本註冊的提醒關掉
-        else{
-            val cancellationIntent = Intent(this, CancelAlarmReceiver::class.java)
-            cancellationIntent.putExtra("item_id", item.id)
-            val broadcastCODE = item.id.toInt()
-            val cancellationPendingIntent = PendingIntent.getBroadcast(this, broadcastCODE, cancellationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-            val am = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            am.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, cancellationPendingIntent)
-            Log.e("註銷已註冊提醒", "${calendar.time}")
-        }
 
-    }
+
+
 }

@@ -19,12 +19,16 @@ class AlarmReceiver : BroadcastReceiver() {
         //讀取itemid
         val itemid=intent.getLongExtra("item_id",1L)
          notif_id=itemid.toInt()
-        Log.e("Alarm","項目id:$notif_id")
 
-        notification(context,title)
-        Log.i("Alarm","鬧鐘重複提醒中")
+        //讀取事件時間點
+        val item_eventDatetime=intent.getLongExtra("item_eventDatetime",0L)
+        val daysbetween =timeToDays(item_eventDatetime)
+
+
+        notification(context,title,daysbetween)
+        Log.e("Alarm","重複提醒中,項目id:$notif_id 標題:$title ,剩下$daysbetween 天")
     }
-    fun notification(context: Context,title:String){
+    fun notification(context: Context,title:String,daysbetween:Int){
         val notificationmanager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -39,10 +43,10 @@ class AlarmReceiver : BroadcastReceiver() {
                 PendingIntent.FLAG_UPDATE_CURRENT)
 
         val notification = NotificationCompat.Builder(context, "channelID")
-                .setSmallIcon(R.drawable.test)
+                .setSmallIcon(R.drawable.app_icon_notif)
                 //.setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.penguin))
                 .setContentTitle(title)
-                .setContentText("xxxxxxxxx")
+                .setContentText("剩下 $daysbetween 天")
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE))
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)

@@ -12,6 +12,8 @@ class Item: java.io.Serializable  {
     var alarmDatetime:Long=0
     var alarmAt:Long=0
     var alarmInterval:Long=0
+    var category:Int=0
+    var memo:String=""
 
     constructor() {
         item_icon = R.drawable.test
@@ -20,11 +22,13 @@ class Item: java.io.Serializable  {
         alarmDatetime=0L
         alarmAt=0L
         alarmInterval=0L
-
+        category=0
+        memo=""
     }
 
     constructor(id: Long, item_icon:Int, item_title:String, eventDatetime:Long
-                ,alarmDatetime:Long, alarmAt:Long, alarmInterval:Long) {
+                ,alarmDatetime:Long, alarmAt:Long, alarmInterval:Long
+                ,category:Int,memo:String) {
         this.id = id
         this.item_icon=item_icon
         this.item_title=item_title
@@ -32,6 +36,7 @@ class Item: java.io.Serializable  {
         this.alarmDatetime=alarmDatetime
         this.alarmAt=alarmAt
         this.alarmInterval=alarmInterval
-
+        this.category=category
+        this.memo=memo
     }
 }

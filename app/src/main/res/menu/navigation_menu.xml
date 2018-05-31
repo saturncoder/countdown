@@ -1,20 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
-        <item android:title="Category">
+    <group android:id="@+id/group_category">
+        <item android:title="category">
             <menu>
-                <item
-                    android:id="@+id/item1"
-                    android:title="Item" />
-                <item android:title="Item" />
-                <item android:title="Item" />
+                <group
+                    android:id="@+id/group1"
+                    android:checkableBehavior="single"
+                    android:orderInCategory="1">
+                    <item
+                        android:id="@+id/category_all"
+                        android:title="全部" />
+                    <item
+                        android:id="@+id/category_unsorted"
+                        android:title="未分類" />
+                    <item
+                        android:id="@+id/category1"
+                        android:title="生活" />
+                    <item
+                        android:id="@+id/category2"
+                        android:title="工作" />
+                    <item
+                        android:id="@+id/category3"
+                        android:title="考試" />
+                    <item
+                        android:id="@+id/category4"
+                        android:title="紀念日" />
+                </group>
             </menu>
         </item>
     </group>
-    <item
-        android:id="@+id/settings"
-        android:checkable="false"
-        android:enabled="true"
-        android:title="設定" />
+    <group
+        android:id="@+id/group_others"
+        android:orderInCategory="10">
+        <item
+            android:id="@+id/theme"
+            android:icon="@drawable/baseline_color_lens_black_24dp"
+            android:title="主題" />
+        <item
+            android:id="@+id/settings"
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:title="設定" />
+        <item
+            android:id="@+id/feedback"
+            android:icon="@drawable/baseline_feedback_black_24dp"
+            android:title="回饋意見" />
+        <item
+            android:id="@+id/aboutAPP"
+            android:icon="@drawable/baseline_info_black_24dp"
+            android:title="關於" />
+    </group>
 </menu>

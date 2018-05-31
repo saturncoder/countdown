@@ -14,11 +14,11 @@ class CancelAlarmReceiver : BroadcastReceiver() {
 
         val intent_alarm = Intent(context, AlarmReceiver::class.java)
         val REQUESTCODE=intent.getLongExtra("item_id",1L).toInt()
-        Log.i("itemID","$REQUESTCODE")
+
         val pendingIntent =PendingIntent.getBroadcast(context,REQUESTCODE, intent_alarm, PendingIntent.FLAG_UPDATE_CURRENT)
         pendingIntent.cancel()
         val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         am.cancel(pendingIntent)
-        Log.i("Alarm","提醒到期 關掉了")
+        Log.e("Alarm","itemID:$REQUESTCODE 提醒到期 關掉了")
     }
 }

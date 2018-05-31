@@ -24,6 +24,8 @@ class ItemDAO(context: Context) {
         val ALARMDATETIME_COLUMN = "alarmdatetime"
         val ALARMAT_COLUMN="alarmat"
         val ALARMINTERVAL_COLUMN="alarminterval"
+        val CATEGORY_COLUMN="category"
+        val MEMO_COLUMN="memo"
 
         // 使用上面宣告的變數建立表格的SQL敘述
         val CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
@@ -33,7 +35,9 @@ class ItemDAO(context: Context) {
                 EVENTDATETIME_COLUMN + " INTEGER NOT NULL,"+
                 ALARMDATETIME_COLUMN + " INTEGER NOT NULL,"+
                 ALARMAT_COLUMN + " INTEGER NOT NULL,"+
-                ALARMINTERVAL_COLUMN + " INTEGER NOT NULL)"
+                ALARMINTERVAL_COLUMN + " INTEGER NOT NULL,"+
+                CATEGORY_COLUMN+" INTEGER NOT NULL,"+
+                MEMO_COLUMN+" TEXT NOT NULL)"
     }
 
     // 資料庫物件 writableDatabase
@@ -66,6 +70,20 @@ class ItemDAO(context: Context) {
 
             return result
         }
+    fun category(categoryID:Int): ArrayList<Item>{
+        val result = ArrayList<Item>()
+        // 使用分類編號為查詢條件
+        val where = CATEGORY_COLUMN + "=" + categoryID
+        val cursor = db.query(
+                TABLE_NAME, null, where, null, null, null, null, null)
+
+        while (cursor.moveToNext()) {
+            result.add(getRecord(cursor))
+        }
+
+        cursor.close()
+        return result
+    }
 
     // 關閉資料庫，一般的應用都不需要修改
     fun close() {
@@ -110,13 +128,15 @@ class ItemDAO(context: Context) {
 
     private fun itemToContentValues(item : Item, cv : ContentValues) {
         // 第一個參數是欄位名稱， 第二個參數是欄位的資料
-        cv.put(ICON_COLUMN, item.id)
+        //cv.put(ICON_COLUMN, item.id)
         cv.put(ICON_COLUMN, item.item_icon)
         cv.put(TITLE_COLUMN, item.item_title)
         cv.put(EVENTDATETIME_COLUMN, item.eventDatetime)
         cv.put(ALARMDATETIME_COLUMN, item.alarmDatetime)
         cv.put(ALARMAT_COLUMN,item.alarmAt)
         cv.put(ALARMINTERVAL_COLUMN,item.alarmInterval)
+        cv.put(CATEGORY_COLUMN,item.category)
+        cv.put(MEMO_COLUMN,item.memo)
     }
 
     // 刪除指定參數編號的資料
@@ -161,15 +181,17 @@ class ItemDAO(context: Context) {
         result.alarmDatetime = cursor.getLong(4)
         result.alarmAt=cursor.getLong(5)
         result.alarmInterval=cursor.getLong(6)
+        result.category=cursor.getInt(7)
+        result.memo=cursor.getString(8)
         // 回傳結果
         return result
     }
 
     // 建立範例資料
     fun createSampleData() {
-        val item = Item(0, R.drawable.test, "考試", 1527509900000,0,0,0)
-        val item2 = Item(0, R.drawable.test, "回家", 1522509900000,0,0,0)
-        val item3 = Item(0, R.drawable.test, "旅遊", 1522508900000,0,0,0)
+        val item = Item(0, R.drawable.test, "考試", 1528609900000,0,0,0,0,"")
+        val item2 = Item(1, R.drawable.test, "回家", 1529709900000,0,0,0,0,"")
+        val item3 = Item(2, R.drawable.test, "旅遊", 1528508900000,0,0,0,0,"")
 
         insert(item)
         insert(item2)

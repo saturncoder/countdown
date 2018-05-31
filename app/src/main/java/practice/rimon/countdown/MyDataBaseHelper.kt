@@ -29,7 +29,8 @@ class MyDataBaseHelper(context: Context, name: String,
         // 資料庫名稱
         val DATABASE_NAME = "mydatabase.db"
         // 資料庫版本，資料結構改變的時候要更改這個數字，通常是加一
-        val VERSION = 4
+        //0529
+        val VERSION = 5
 
         // 需要資料庫的元件呼叫這個函式，這個函式在一般的應用都不需要修改
         fun getDatabase(context: Context): SQLiteDatabase {

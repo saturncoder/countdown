@@ -83,6 +83,8 @@
                 android:id="@+id/notif_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="8dp"
                 android:layout_weight="0.2"
                 android:visibility="invisible"
                 app:srcCompat="@drawable/notifications_active_black_24dp" />

@@ -1,9 +1,14 @@
 package practice.rimon.countdown
 
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.support.design.widget.Snackbar
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +27,7 @@ class myAdapter(val mydata:ArrayList<Item>,
                 val clickListener: (Int) -> Unit):
                                         RecyclerView.Adapter<myAdapter.viewholder>(),ItemTouchHelperAdapter {
 val currenttime=Calendar.getInstance()
+    //滑動時的行為
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int, position: Int) {
         if (viewHolder is myAdapter.viewholder) {
 
@@ -31,7 +37,7 @@ val currenttime=Calendar.getInstance()
 
             // remove the item from recycler view
             onItemDissmiss(viewHolder.getAdapterPosition())
-
+            Log.e("adapter","移除項目$deletedIndex ,adapter剩下:${mydata.size}個")
             // showing snack bar with Undo option
             val snackbar = Snackbar.make(recyclerView, "Item removed !", Snackbar.LENGTH_LONG)
             snackbar.setAction("UNDO") {
@@ -47,6 +53,16 @@ val currenttime=Calendar.getInstance()
                     if(event!=DISMISS_EVENT_ACTION){
                         //確定沒有undo後，才從資料庫刪除
                         itemDAO.delete(deletedItem.id)
+                        //取消已註冊提醒
+                        if(deletedItem.alarmDatetime!=0L && deletedItem.alarmDatetime-23L*60L*60L*1000L>currenttime.timeInMillis) {
+                            val cancellationIntent = Intent(recyclerView.context, CancelAlarmReceiver::class.java)
+                            cancellationIntent.putExtra("item_id", deletedItem.id)
+                            val broadcastCODE = deletedItem.id.toInt()
+                            val cancellationPendingIntent = PendingIntent.getBroadcast(recyclerView.context, broadcastCODE, cancellationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+                            val am = recyclerView.context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                            am.set(AlarmManager.RTC_WAKEUP, currenttime.timeInMillis, cancellationPendingIntent)
+                            Log.e("因項目${deletedItem.item_title}(id:${deletedItem.id})刪除而註銷提醒", "${currenttime.time}")
+                        }
                     }
                 }
             })
@@ -95,7 +111,7 @@ val currenttime=Calendar.getInstance()
 
         holder.bindinfo(mydata[position])
         //position 從0開始編號
-        holder.itemView.setOnClickListener{clickListener(position)}
+        holder.itemView.setOnClickListener{clickListener(holder.adapterPosition)}
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): viewholder {

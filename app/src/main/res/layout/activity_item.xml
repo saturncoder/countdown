@@ -4,18 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
     android:orientation="vertical"
     tools:context=".ItemActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -28,7 +29,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="2"
-                app:srcCompat="@mipmap/ic_launcher_round"
+                app:srcCompat="@drawable/icons_96"
                 tools:layout_editor_absoluteX="47dp"
                 tools:layout_editor_absoluteY="45dp" />
 
@@ -45,6 +46,7 @@
                     android:layout_weight="1"
                     android:ems="10"
                     android:hint="輸入事件名稱"
+                    android:imeOptions="actionDone"
                     android:singleLine="true" />
 
                 <TextView
@@ -52,6 +54,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
+                    android:drawableLeft="@drawable/baseline_event_black_24dp"
+                    android:drawablePadding="8dp"
                     android:gravity="center_vertical"
                     android:text="選擇日期"
                     tools:layout_editor_absoluteX="200dp"
@@ -63,19 +67,22 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:text="0"
+                    android:text="0 天"
                     tools:layout_editor_absoluteX="200dp"
                     tools:layout_editor_absoluteY="81dp" />
+
+                <TextView
+                    android:id="@+id/textView_item_category"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:drawableLeft="@drawable/baseline_local_offer_black_24dp"
+                    android:drawablePadding="8dp"
+                    android:gravity="center_vertical"
+                    android:text="未分類" />
             </LinearLayout>
 
         </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"
-        android:orientation="vertical">
 
         <View
             android:id="@+id/divider"
@@ -86,15 +93,17 @@
         <Switch
             android:id="@+id/switch_reminder"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/notifications_active_black_24dp"
+            android:drawablePadding="8dp"
             android:text="提醒" />
 
         <TextView
             android:id="@+id/reminder_interval"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"
             android:clickable="false"
             android:gravity="center"
             android:text="每日"
@@ -104,10 +113,10 @@
         <TextView
             android:id="@+id/reminder_time"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:gravity="center"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"
             android:clickable="false"
+            android:gravity="center"
             android:text="00:00"
             android:textColor="@android:color/darker_gray" />
 
@@ -117,16 +126,18 @@
             android:layout_height="1dp"
             android:background="?android:attr/listDivider" />
 
-        <CheckBox
-            android:id="@+id/checkBox"
+        <EditText
+            android:id="@+id/editText_memo"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="CheckBox" />
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:gravity="top"
+            android:hint="memo"
 
-        <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:inputType="textMultiLine"
+            android:maxHeight="100dp"
+            android:maxLength="300"
+            android:scrollbars="vertical" />
 
     </LinearLayout>
 
