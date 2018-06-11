@@ -15,5 +15,7 @@
         <item name="android:windowBackground">@drawable/launch_picture</item>
     </style>
 
+    <style name="defaultTheme" parent="AppTheme" />
+
 
 </resources>

@@ -3,6 +3,18 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/category_edit"
+        android:icon="@drawable/baseline_edit_white_24dp"
+        android:title="editCategoryName"
+        android:visible="false"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/delete_category"
+        android:icon="@drawable/ic_delete_white_24dp"
+        android:title="delete_category"
+        android:visible="false"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/switchLayout"
         android:icon="@drawable/ic_view_list_white_24dp"
         android:title="switchLayout"

@@ -70,6 +70,7 @@ class ItemDAO(context: Context) {
 
             return result
         }
+
     fun category(categoryID:Int): ArrayList<Item>{
         val result = ArrayList<Item>()
         // 使用分類編號為查詢條件

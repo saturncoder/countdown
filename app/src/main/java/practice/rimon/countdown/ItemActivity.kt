@@ -142,6 +142,7 @@ class ItemActivity : AppCompatActivity() {
             return true
         }
         else if(item.itemId==android.R.id.home){
+            setResult(Activity.RESULT_CANCELED, intent)
             onBackPressed()
             return true
         }
@@ -187,7 +188,7 @@ class ItemActivity : AppCompatActivity() {
 
     private fun comfirmItem(){
         //檢查事件標題是否為空
-        if(TextUtils.isEmpty(editText_item_title.text.toString())){
+        if(TextUtils.isEmpty(editText_item_title.text.toString().trim())){
             Toast.makeText(this, "請輸入事件名稱", Toast.LENGTH_LONG).show()
         }
         //檢查是否選擇事件日期  (用預設值是0L來檢查)
@@ -201,6 +202,7 @@ class ItemActivity : AppCompatActivity() {
 
             println("press OK button")
             intent.putExtra("countdown.Item", item)
+            intent.putExtra("category_num",stored_category.size)
             setResult(Activity.RESULT_OK, intent)
             //關掉頁面
 
@@ -208,9 +210,9 @@ class ItemActivity : AppCompatActivity() {
         }
         println(item.alarmDatetime)
     }
+    //下面實體鍵返回
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            //crash
             // 設定回應結果為取消
             setResult(Activity.RESULT_CANCELED, intent)
         }
@@ -266,6 +268,7 @@ class ItemActivity : AppCompatActivity() {
 
         val builder = AlertDialog.Builder(this)
         builder.setTitle("選擇分類")
+        builder.setIcon(R.drawable.baseline_local_offer_black_24dp)
         //用來給選單顯示的adapter
         val arrayAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_single_choice)
         //加入已儲存分類
@@ -277,28 +280,45 @@ class ItemActivity : AppCompatActivity() {
         builder.setSingleChoiceItems(arrayAdapter,item.category,{dialogInterface, i ->
             //如果選擇最後一個(新增分類...)
             if(i==arrayAdapter.count-1){
-                //跳出新增視窗
-                val builerinner = AlertDialog.Builder(this)
-                val edittext = EditText(this)
-                edittext.setSingleLine(true)
-                builerinner.setTitle("新增分類名稱")
-                builerinner.setView(edittext)
-
-                builerinner.setPositiveButton("確定") { dialog, whichButton ->
-                   val newcategory = edittext.text.toString()
-                    //插到倒數第二個
-                    arrayAdapter.insert(newcategory,arrayAdapter.count-1)
-                    arrayAdapter.notifyDataSetChanged()
-                    //存入自訂分類陣列
-                    stored_category.add(newcategory)
-                    //存入sharedpref
-                    saveArrayList(stored_category,"category",this)
+                if(stored_category.size>=8){
+                    val builderalert = AlertDialog.Builder(this)
+                    builderalert.setTitle("提醒")
+                    builderalert.setMessage("您只能新增3個自訂分類")
+                    builderalert.setPositiveButton("確定",{_ ,_->})
+                    builderalert.create().show()
 
                 }
+                else {
+                    //未滿3個跳出新增視窗
+                    val builderinner = AlertDialog.Builder(this)
+                    val edittext = EditText(this)
+                    edittext.setSingleLine(true)
+                    builderinner.setTitle("新增分類名稱")
+                    builderinner.setView(edittext)
 
-                builerinner.setNegativeButton("取消") { dialog, whichButton ->  }
+                    builderinner.setPositiveButton("確定",null)
+                    builderinner.setNegativeButton("取消",null)
 
-                builerinner.show()
+                    val alertdialog=builderinner.show()
+                    val confirm=alertdialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                    confirm.setOnClickListener {
+                        if(TextUtils.isEmpty(edittext.text.toString().trim())) {
+                            //edittext.error="請輸入分類名稱"
+                            Toast.makeText(this, "請輸入分類名稱", Toast.LENGTH_LONG).show()
+                        }
+                        else {
+                            val newcategory = edittext.text.toString()
+                            //插到倒數第二個
+                            arrayAdapter.insert(newcategory, arrayAdapter.count - 1)
+                            arrayAdapter.notifyDataSetChanged()
+                            //存入自訂分類陣列
+                            stored_category.add(newcategory)
+                            //存入sharedpref
+                            saveArrayList(stored_category, "category", this)
+                            alertdialog.dismiss()
+                        }
+                    }
+                }
             }
             else{
                 textView_item_category.text=arrayAdapter.getItem(i).toString()

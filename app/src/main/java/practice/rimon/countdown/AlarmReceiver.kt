@@ -43,7 +43,7 @@ class AlarmReceiver : BroadcastReceiver() {
                 PendingIntent.FLAG_UPDATE_CURRENT)
 
         val notification = NotificationCompat.Builder(context, "channelID")
-                .setSmallIcon(R.drawable.app_icon_notif)
+                .setSmallIcon(R.drawable.app_icon_notif2)
                 //.setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.penguin))
                 .setContentTitle(title)
                 .setContentText("剩下 $daysbetween 天")
