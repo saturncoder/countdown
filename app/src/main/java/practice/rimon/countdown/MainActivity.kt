@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
 
     val FAB_addITEM_REQUEST_CODE=1
     val editItem_REQUEST_CODE=2
+    val themeActivityCode=333
     lateinit var toggle:ActionBarDrawerToggle
 
     val mydata=ArrayList<Item>()
@@ -42,6 +43,25 @@ class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
     var category_num=0
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        val themeID = prefs.getInt("theme", 0)
+        when(themeID){
+            0->setTheme(R.style.StartTheme)
+            1->setTheme(R.style.brownTheme)
+            2->setTheme(R.style.greenTheme)
+            3->setTheme(R.style.redTheme)
+            4->setTheme(R.style.yellowTheme)
+            5->setTheme(R.style.orgTheme)
+            6->setTheme(R.style.blueTheme)
+            7->setTheme(R.style.greyTheme)
+            8->setTheme(R.style.purpleTheme)
+            9->setTheme(R.style.pinkTheme)
+            10->setTheme(R.style.indigoTheme)
+            11->setTheme(R.style.blackTheme)
+            12->setTheme(R.style.silverTheme)
+            13->setTheme(R.style.skinTheme)
+        }
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -98,7 +118,9 @@ class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
                         }
                         //跳至未分類
                         saveToSharedPref(0)
-                        recreate()
+                        val intent=Intent(this,MainActivity::class.java)
+                        startActivity(intent)
+                        finish()
                     })
                     builder.setNegativeButton( "取消",  {dialogInterface, i ->    })
 
@@ -126,7 +148,9 @@ class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
                             categoryTo(7,6)
                         }
                         saveToSharedPref(0)
-                        recreate()
+                        val intent=Intent(this,MainActivity::class.java)
+                        startActivity(intent)
+                        finish()
                     })
                     builder.setNegativeButton( "取消",  {dialogInterface, i ->    })
 
@@ -148,7 +172,9 @@ class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
                             categoryTo(7,0)
                         }
                         saveToSharedPref(0)
-                        recreate()
+                        val intent=Intent(this,MainActivity::class.java)
+                        startActivity(intent)
+                        finish()
                     })
                     builder.setNegativeButton( "取消",  {dialogInterface, i ->    })
 
@@ -352,7 +378,8 @@ class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
                 startActivity(Intent(this, PrefActivity::class.java))
             }
             R.id.theme-> {
-                startActivity(Intent(this, ThemeActivity::class.java))
+                val intent=Intent(this,ThemeActivity::class.java)
+                startActivityForResult(intent,themeActivityCode)
             }
 
         }
@@ -366,66 +393,78 @@ class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        var toCategory=0
-        //新增
-        if(requestCode==FAB_addITEM_REQUEST_CODE && resultCode== Activity.RESULT_OK){
-            // 讀取物件  (放裡面避免返回時data是null)
-            val item = data!!.extras.getSerializable("countdown.Item") as Item
-            // 新增資料到資料庫
-            val itemNew : Item = itemDAO.insert(item)
-            // 讀出物件的編號
-            item.id = itemNew.id
-           Log.e("itemID","${itemNew.id}")
-            // 加入新增的記事物件
-            mydata.add(item)
-            //設提醒
-            setNotification(item)
-            //讀出物件分類
-            toCategory=item.category
 
-        }
-        else if (requestCode==editItem_REQUEST_CODE && resultCode== Activity.RESULT_OK){
-            // 讀取物件
-            val item = data!!.extras.getSerializable("countdown.Item") as Item
-            val position=data.extras.getInt("array_position")
-            // 更新資料庫物件
-            itemDAO.update(item)
-            //
+        if(requestCode==FAB_addITEM_REQUEST_CODE || requestCode==editItem_REQUEST_CODE) {
+            var toCategory = 0
+            //新增
+            if (requestCode == FAB_addITEM_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+                // 讀取物件  (放裡面避免返回時data是null)
+                val item = data!!.extras.getSerializable("countdown.Item") as Item
+                // 新增資料到資料庫
+                val itemNew: Item = itemDAO.insert(item)
+                // 讀出物件的編號
+                item.id = itemNew.id
+                Log.e("itemID", "${itemNew.id}")
+                // 加入新增的記事物件
+                mydata.add(item)
+                //設提醒
+                setNotification(item)
+                //讀出物件分類
+                toCategory = item.category
+            }
+            else if (requestCode == editItem_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+                // 讀取物件
+                val item = data!!.extras.getSerializable("countdown.Item") as Item
+                val position = data.extras.getInt("array_position")
+                // 更新資料庫物件
+                itemDAO.update(item)
+                //
 
-            // 加入的記事物件
-            mydata.set(position,item)
-            Log.e("有無設置提醒","${item.alarmDatetime}")
-            //設提醒
-            setNotification(item)
-            //讀出物件分類
-            toCategory=item.category
-        }
-        // 通知資料改變
-        myadapter.notifyDataSetChanged()
+                // 加入的記事物件
+                mydata.set(position, item)
+                Log.e("有無設置提醒", "${item.alarmDatetime}")
+                //設提醒
+                setNotification(item)
+                //讀出物件分類
+                toCategory = item.category
+            }
+            // 通知資料改變
+            myadapter.notifyDataSetChanged()
 
-        //檢查是否有新增分類
-        val newcategory_num=data!!.getIntExtra("category_num",0)
-        if(newcategory_num>category_num){
-            //重整後再跳轉
-            saveToSharedPref(toCategory)
-            navigation_view.menu.getItem(0).subMenu.setGroupCheckable(R.id.group1,false,true)
-            recreate()
-        }
-        else {
-            //跳轉至該分類  (分類的號碼+1(多了 全部))
-             this.onNavigationItemSelected(navigation_view.menu.getItem(0).subMenu.getItem(toCategory+1))
-            when (toCategory + 1) {
-                1 -> navigation_view.setCheckedItem(R.id.category_unsorted)
-                2 -> navigation_view.setCheckedItem(R.id.category1)
-                3 -> navigation_view.setCheckedItem(R.id.category2)
-                4 -> navigation_view.setCheckedItem(R.id.category3)
-                5 -> navigation_view.setCheckedItem(R.id.category4)
-                6->navigation_view.setCheckedItem(navigation_view.menu.getItem(0).subMenu.getItem(6).itemId)
-                7->navigation_view.setCheckedItem(navigation_view.menu.getItem(0).subMenu.getItem(7).itemId)
-                8->navigation_view.setCheckedItem(navigation_view.menu.getItem(0).subMenu.getItem(8).itemId)
+            //檢查是否有新增分類
+            val newcategory_num = data!!.getIntExtra("category_num", 0)
+            if (newcategory_num > category_num) {
+                //重整後再跳轉
+                saveToSharedPref(toCategory)
+                val intent=Intent(this,MainActivity::class.java)
+                startActivity(intent)
+                finish()
+
+                //recreate()
+            }
+            else {
+                //跳轉至該分類  (分類的號碼+1(多了 全部))
+                this.onNavigationItemSelected(navigation_view.menu.getItem(0).subMenu.getItem(toCategory + 1))
+                when (toCategory + 1) {
+                    1 -> navigation_view.setCheckedItem(R.id.category_unsorted)
+                    2 -> navigation_view.setCheckedItem(R.id.category1)
+                    3 -> navigation_view.setCheckedItem(R.id.category2)
+                    4 -> navigation_view.setCheckedItem(R.id.category3)
+                    5 -> navigation_view.setCheckedItem(R.id.category4)
+                    6 -> navigation_view.setCheckedItem(navigation_view.menu.getItem(0).subMenu.getItem(6).itemId)
+                    7 -> navigation_view.setCheckedItem(navigation_view.menu.getItem(0).subMenu.getItem(7).itemId)
+                    8 -> navigation_view.setCheckedItem(navigation_view.menu.getItem(0).subMenu.getItem(8).itemId)
+                }
             }
         }
+        //改變主題顏色
+        else if(requestCode==themeActivityCode && resultCode== Activity.RESULT_OK){
+            Log.e("activity","從themeActivity返回")
+            val intent=Intent(this,MainActivity::class.java)
+            startActivity(intent)
+            finish()
 
+        }
     }
 
     private fun itemClickHandler(position:Int){

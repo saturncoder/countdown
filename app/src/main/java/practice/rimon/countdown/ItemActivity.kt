@@ -45,6 +45,25 @@ class ItemActivity : AppCompatActivity() {
     val remindertimeFormat = SimpleDateFormat("HH:mm",Locale.getDefault())
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        val themeID = prefs.getInt("theme", 0)
+        when(themeID){
+            0->setTheme(R.style.AppTheme)
+            1->setTheme(R.style.brownTheme)
+            2->setTheme(R.style.greenTheme)
+            3->setTheme(R.style.redTheme)
+            4->setTheme(R.style.yellowTheme)
+            5->setTheme(R.style.orgTheme)
+            6->setTheme(R.style.blueTheme)
+            7->setTheme(R.style.greyTheme)
+            8->setTheme(R.style.purpleTheme)
+            9->setTheme(R.style.pinkTheme)
+            10->setTheme(R.style.indigoTheme)
+            11->setTheme(R.style.blackTheme)
+            12->setTheme(R.style.silverTheme)
+            13->setTheme(R.style.skinTheme)
+        }
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_item)
         JodaTimeAndroid.init(this)

@@ -6,4 +6,279 @@
     android:layout_height="match_parent"
     tools:context=".ThemeActivity">
 
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardView_theme"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:cardCornerRadius="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <ImageView
+
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/icons_96" />
+
+            <TextView
+
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:padding="8sp"
+                android:text="birthday party"
+                android:textSize="24sp" />
+
+            <TextView
+
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="52"
+                android:textColor="@android:color/holo_green_dark"
+                android:textSize="36sp" />
+
+            <ImageView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="8dp"
+                android:layout_weight="0.2"
+                android:visibility="visible"
+                app:srcCompat="@drawable/notifications_active_black_24dp" />
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardView2_theme"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="116dp"
+        app:cardCornerRadius="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <ImageView
+
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/icons_96" />
+
+            <TextView
+
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:padding="8sp"
+                android:text="final project due"
+                android:textSize="24sp" />
+
+            <TextView
+
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="16"
+                android:textColor="@android:color/holo_green_dark"
+                android:textSize="36sp" />
+
+            <ImageView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="8dp"
+                android:layout_weight="0.2"
+                android:visibility="visible"
+                app:srcCompat="@drawable/notifications_active_black_24dp" />
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/FAB_theme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:clickable="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView2_theme"
+        app:srcCompat="@drawable/ic_add_white_24dp" />
+
+    <HorizontalScrollView
+        android:id="@+id/scrollview"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:fillViewport="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:id="@+id/scroll_linearlayout"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="false"
+            android:orientation="horizontal"
+            android:scrollbars="horizontal">
+
+            <ImageButton
+                android:id="@+id/defaultColor"
+                android:layout_width="@dimen/theme_block_width"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/theme_block_margin"
+                android:layout_weight="1"
+                android:background="@color/colorPrimary" />
+
+            <ImageButton
+                android:id="@+id/brownTheme"
+                android:layout_width="@dimen/theme_block_width"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/theme_block_margin"
+                android:layout_weight="1"
+                android:background="@color/brownPrimary"
+                tools:layout_editor_absoluteX="26dp"
+                tools:layout_editor_absoluteY="415dp" />
+
+            <ImageButton
+                android:id="@+id/greenTheme"
+                android:layout_width="@dimen/theme_block_width"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/theme_block_margin"
+                android:layout_weight="1"
+                android:background="@color/greenPrimary" />
+
+            <ImageButton
+                android:id="@+id/redTheme"
+                android:layout_width="@dimen/theme_block_width"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/theme_block_margin"
+                android:layout_weight="1"
+                android:background="@color/redPrimary" />
+
+            <ImageButton
+                android:id="@+id/yellowTheme"
+                android:layout_width="@dimen/theme_block_width"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/theme_block_margin"
+                android:layout_weight="1"
+                android:background="@color/yellowPrimary" />
+
+            <ImageButton
+                android:id="@+id/orgTheme"
+                android:layout_width="@dimen/theme_block_width"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/theme_block_margin"
+                android:layout_weight="1"
+                android:background="@color/orgPrimary" />
+
+            <ImageButton
+                android:id="@+id/blueTheme"
+                android:layout_width="@dimen/theme_block_width"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/theme_block_margin"
+                android:layout_weight="1"
+                android:background="@color/bluePrimary" />
+
+            <ImageButton
+                android:id="@+id/greyTheme"
+                android:layout_width="@dimen/theme_block_width"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/theme_block_margin"
+                android:layout_weight="1"
+                android:background="@color/greyPrimary" />
+
+            <ImageButton
+                android:id="@+id/purpleTheme"
+                android:layout_width="@dimen/theme_block_width"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/theme_block_margin"
+                android:layout_weight="1"
+                android:background="@color/purplePrimary" />
+
+            <ImageButton
+                android:id="@+id/pinkTheme"
+                android:layout_width="@dimen/theme_block_width"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/theme_block_margin"
+                android:layout_weight="1"
+                android:background="@color/pinkPrimary" />
+
+            <ImageButton
+                android:id="@+id/indigoTheme"
+                android:layout_width="@dimen/theme_block_width"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/theme_block_margin"
+                android:layout_weight="1"
+                android:background="@color/indigoPrimary" />
+
+            <ImageButton
+                android:id="@+id/blackTheme"
+                android:layout_width="@dimen/theme_block_width"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/theme_block_margin"
+                android:layout_weight="1"
+                android:background="@color/blackPrimary" />
+
+            <ImageButton
+                android:id="@+id/silverTheme"
+                android:layout_width="@dimen/theme_block_width"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/theme_block_margin"
+                android:layout_weight="1"
+                android:background="@color/silverPrimary" />
+
+            <ImageButton
+                android:id="@+id/skinTheme"
+                android:layout_width="@dimen/theme_block_width"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/theme_block_margin"
+                android:layout_weight="1"
+                android:background="@color/skinPrimary" />
+
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:text="選擇主題："
+        android:textColor="@android:color/black"
+        android:textSize="26dp"
+        app:layout_constraintBottom_toTopOf="@+id/scrollview"
+        app:layout_constraintStart_toStartOf="@+id/scrollview" />
+
 </android.support.constraint.ConstraintLayout>

@@ -3,4 +3,56 @@
     <color name="colorPrimary">#008181</color>
     <color name="colorPrimaryDark">#005656</color>
     <color name="colorAccent">#de7a22</color>
+
+    <color name="brownPrimary">#af4425</color>
+    <color name="browmPrimaryDark">#662E1C</color>
+    <color name="brownAccent">#89a35c</color>
+
+    <color name="greenPrimary">#68a225</color>
+    <color name="greenPrimaryDark">#265C00</color>
+    <color name="greenAccent">#785A46</color>
+
+    <color name="redPrimary">#d72c16</color>
+    <color name="redPrimaryDark">#A10115</color>
+    <color name="redAccent">#2F2F28</color>
+
+    <color name="yellowPrimary">#ffc629</color>
+    <color name="yellowPrimaryDark">#ffae0f</color>
+    <color name="yellowAccent">#f9483b</color>
+
+    <color name="orgPrimary">#ff8d3f</color>
+    <color name="orgPrimaryDark">#ff822d</color>
+    <color name="orgAccent">#353c3f</color>
+
+    <color name="bluePrimary">#336b87</color>
+    <color name="bluePrimaryDark">#2A3132</color>
+    <color name="blueAccent">#763626</color>
+
+    <color name="greyPrimary">#a3a5ab</color>
+    <color name="greyPrimaryDark">#898b93</color>
+    <color name="greyAccent">#d7d13f</color>
+
+    <color name="purplePrimary">#9b40a7</color>
+    <color name="purplePrimaryDark">#7e3987</color>
+    <color name="purpleAccent">#ef780f</color>
+
+    <color name="pinkPrimary">#ef8799</color>
+    <color name="pinkPrimaryDark">#ea768a</color>
+    <color name="pinkAccent">#0dcadc</color>
+
+    <color name="indigoPrimary">#4d648d</color>
+    <color name="indigoPrimaryDark">#283655</color>
+    <color name="indigoAccent">#1e1f26</color>
+
+    <color name="blackPrimary">#212121</color>
+    <color name="blackPrimaryDark">#060606</color>
+    <color name="blackAccent">#948b88</color>
+
+    <color name="silverPrimary">#e6ead3</color>
+    <color name="silverPrimaryDark">#d0d1d4</color>
+    <color name="silverAccent">#336b87</color>
+
+    <color name="skinPrimary">#f98866</color>
+    <color name="skinPrimaryDark">#ff7349</color>
+    <color name="skinAccent">#80BD9E</color>
 </resources>
