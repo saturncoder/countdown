@@ -65,6 +65,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
+                android:gravity="center_vertical"
                 android:padding="8sp"
                 android:text="TextView"
                 android:textSize="24sp" />

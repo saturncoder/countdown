@@ -68,7 +68,7 @@ class ThemeActivity : AppCompatActivity(), View.OnClickListener {
         //清除全部按鍵打勾鍵
         clearAllotherCheckedItem()
         if(view is ImageButton){
-            view.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.check_circle_48dp))
+            view.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.ic_check_circle_48dp))
         }
         when (view!!.id){
             R.id.defaultColor->{changeTheme(R.color.colorPrimary,R.color.colorPrimaryDark,R.color.colorAccent,0)}

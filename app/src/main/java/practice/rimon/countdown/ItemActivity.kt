@@ -1,12 +1,20 @@
 package practice.rimon.countdown
 
+import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.provider.MediaStore
+import android.support.design.widget.BottomSheetDialog
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.text.InputType
 import android.text.TextUtils
@@ -16,10 +24,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.ArrayAdapter
-import android.widget.CompoundButton
-import android.widget.EditText
-import android.widget.Toast
+import android.widget.*
 import kotlinx.android.synthetic.main.activity_item.*
 import net.danlew.android.joda.JodaTimeAndroid
 import java.text.SimpleDateFormat
@@ -37,7 +42,8 @@ class ItemActivity : AppCompatActivity() {
     var item=Item()
     //要用來讀出已儲存分類的陣列
     var stored_category=ArrayList<String>()
-
+    val CAMERA_RCODE=2323
+    val GALLERY_RCODE=4545
 
     var eventDate_mills:Long=0
     //顯示的日期格式 (若換地區有問題可能是這裡出問題)
@@ -149,6 +155,7 @@ class ItemActivity : AppCompatActivity() {
         reminder_time.isClickable=false
         editText_memo.imeOptions=EditorInfo.IME_ACTION_DONE
         editText_memo.setRawInputType(InputType.TYPE_CLASS_TEXT)
+        imageView_item_icon.setOnClickListener(itemIconOnClickListener)
     }
     //右上menu
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -387,8 +394,46 @@ class ItemActivity : AppCompatActivity() {
         }
     }
 
+    private val itemIconOnClickListener=View.OnClickListener {
 
+        val view = layoutInflater.inflate(R.layout.sheet_main, null)
+        val bottomSheetDialog = BottomSheetDialog(this)
+        bottomSheetDialog.setContentView(view)
+        bottomSheetDialog.show()
+        val camera: TextView = view.findViewById(R.id.camera)
+        camera.setOnClickListener {
+            if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(this,arrayOf(Manifest.permission.CAMERA),666)
+            }
+            else {
 
+                val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                startActivityForResult(intent, CAMERA_RCODE)
+                bottomSheetDialog.dismiss()
+            }
+        }
+        val gallery: TextView = view.findViewById(R.id.gallery)
+        gallery.setOnClickListener {
+            val intent = Intent(Intent.ACTION_GET_CONTENT)
+            intent.type = "image/*"
+            startActivityForResult(intent, GALLERY_RCODE)
+            bottomSheetDialog.dismiss()
+        }
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
 
+        if (requestCode == CAMERA_RCODE && resultCode == Activity.RESULT_OK && data != null) {
+            val bitmap = data.extras.get("data") as Bitmap
+            imageView_item_icon.setImageBitmap(bitmap)
+        } else if (requestCode == GALLERY_RCODE && resultCode == Activity.RESULT_OK && data != null) {
+
+            val resolver = this.contentResolver
+            val uri = data.data
+            val bitmap = MediaStore.Images.Media.getBitmap(resolver, uri)
+            imageView_item_icon.setImageBitmap(bitmap)
+        } else {
+        }
+    }
 
 }

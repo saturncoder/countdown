@@ -228,12 +228,15 @@ class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
         //如果有自訂的分類項目，加入左側選單
         category_num=stored_category.size
         if(category_num>5){
+            val category_icons= arrayOf(R.drawable.ic_looks_one_black_24dp,R.drawable.ic_looks_two_black_24dp,R.drawable.ic_looks_3_black_24dp)
             for(i in 5 until  category_num){
                 //groupId ,itemId ,order(weight) ,title    要定位到同個menu
-                navigation_view.menu.getItem(0).subMenu.add(R.id.group1,i,1,stored_category[i])
-                //要設成單選才能 highlight
-                navigation_view.menu.getItem(0).subMenu.setGroupCheckable(R.id.group1,true,true)
+                val item=navigation_view.menu.getItem(0).subMenu.add(R.id.group1,i,1,stored_category[i])
+                item.setIcon(category_icons[i-5])
+
             }
+            //要設成單選才能 highlight
+            navigation_view.menu.getItem(0).subMenu.setGroupCheckable(R.id.group1,true,true)
         }
 
         navigation_view.setNavigationItemSelectedListener(this)
