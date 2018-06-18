@@ -29,7 +29,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="2"
-                app:srcCompat="@drawable/icons_96"
+                android:padding="35dp"
+                app:srcCompat="@drawable/app_icon"
                 tools:layout_editor_absoluteX="47dp"
                 tools:layout_editor_absoluteY="45dp" />
 
@@ -76,7 +77,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:drawableLeft="@drawable/baseline_local_offer_black_24dp"
+                    android:drawableLeft="@drawable/ic_tag_grey_24dp"
                     android:drawablePadding="8dp"
                     android:gravity="center_vertical"
                     android:text="未分類" />

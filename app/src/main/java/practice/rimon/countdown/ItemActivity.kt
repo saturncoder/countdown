@@ -5,34 +5,42 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.os.Environment.getExternalStoragePublicDirectory
 import android.preference.PreferenceManager
 import android.provider.MediaStore
 import android.support.design.widget.BottomSheetDialog
 import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
+import android.support.v4.content.FileProvider
 import android.support.v7.app.AppCompatActivity
 import android.text.InputType
 import android.text.TextUtils
 import android.util.Log
-import android.view.KeyEvent
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.*
 import kotlinx.android.synthetic.main.activity_item.*
 import net.danlew.android.joda.JodaTimeAndroid
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
 
-class ItemActivity : AppCompatActivity() {
+class ItemActivity : AppCompatActivity(){
+
+
 
     //取得一個實例，時間為現在時間 
     val calendar= Calendar.getInstance()//現在時間
@@ -42,13 +50,17 @@ class ItemActivity : AppCompatActivity() {
     var item=Item()
     //要用來讀出已儲存分類的陣列
     var stored_category=ArrayList<String>()
-    val CAMERA_RCODE=2323
-    val GALLERY_RCODE=4545
-
+    val CAMERA_RCODE=33
+    val GALLERY_RCODE=44
+    val PERMISSION_RCODE=55
     var eventDate_mills:Long=0
     //顯示的日期格式 (若換地區有問題可能是這裡出問題)
     val timeFormat = SimpleDateFormat("yyyy-MM-dd",Locale.getDefault())
     val remindertimeFormat = SimpleDateFormat("HH:mm",Locale.getDefault())
+    //是否用預設圖示
+    var changeIcon=false
+    //照相的話原檔的儲存路徑
+    var myIconPath : File? =null
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -141,6 +153,15 @@ class ItemActivity : AppCompatActivity() {
                 reminder.set(Calendar.MINUTE,selectedAlarmat.get(Calendar.MINUTE))
 
             }
+
+            //載入已儲存icon
+            if(itemselected.item_icon.isNotEmpty()){
+                val stored_icon= BitmapFactory.decodeByteArray(itemselected.item_icon,0,itemselected.item_icon.size)
+                imageView_item_icon.setImageBitmap(stored_icon)
+                //沒改的話直接存
+                item.item_icon=itemselected.item_icon
+            }
+
         }
 
 
@@ -222,7 +243,17 @@ class ItemActivity : AppCompatActivity() {
             Toast.makeText(this, "請選擇事件日期", Toast.LENGTH_LONG).show()
         }
         else {
-            item.item_icon = R.drawable.test
+            if(changeIcon) {//跟當次比，編輯項目若沒改已直接存，不經過這裡
+                //val bitmap= BitmapFactory.decodeResource(resources,R.drawable.grid_bg)
+                val bitmapDrawable = imageView_item_icon.drawable as BitmapDrawable
+                val bitmap = bitmapDrawable.bitmap
+                val stream = ByteArrayOutputStream()
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)//100表沒壓縮，png本身就是lostless
+                val img = stream.toByteArray()
+                stream.close()
+                item.item_icon = img
+            }
+            //沒換icon的話就是預設 空值: bytearrayof() ,在recyclerview 載入預設圖示
             item.item_title = editText_item_title.text.toString()
             item.memo=editText_memo.text.toString()
 
@@ -230,8 +261,8 @@ class ItemActivity : AppCompatActivity() {
             intent.putExtra("countdown.Item", item)
             intent.putExtra("category_num",stored_category.size)
             setResult(Activity.RESULT_OK, intent)
-            //關掉頁面
 
+            //關掉頁面
             finish()
         }
         println(item.alarmDatetime)
@@ -294,7 +325,7 @@ class ItemActivity : AppCompatActivity() {
 
         val builder = AlertDialog.Builder(this)
         builder.setTitle("選擇分類")
-        builder.setIcon(R.drawable.baseline_local_offer_black_24dp)
+        builder.setIcon(R.drawable.ic_tag_grey_24dp)
         //用來給選單顯示的adapter
         val arrayAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_single_choice)
         //加入已儲存分類
@@ -400,18 +431,27 @@ class ItemActivity : AppCompatActivity() {
         val bottomSheetDialog = BottomSheetDialog(this)
         bottomSheetDialog.setContentView(view)
         bottomSheetDialog.show()
+        //相機鍵
         val camera: TextView = view.findViewById(R.id.camera)
         camera.setOnClickListener {
-            if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
-                ActivityCompat.requestPermissions(this,arrayOf(Manifest.permission.CAMERA),666)
+            //檢查設備有無相機
+            val pm=this.packageManager
+            if(pm.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+                //要求使用權限
+                val PERMISSIONS = arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                if (!hasPermissions(this, *PERMISSIONS)) {
+                    ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_RCODE)
+                }
+                else {//開啟相機
+                    takePictureIntent()
+                    bottomSheetDialog.dismiss()
+                }
             }
-            else {
-
-                val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                startActivityForResult(intent, CAMERA_RCODE)
-                bottomSheetDialog.dismiss()
+            else{
+                Toast.makeText(this,"No camera detected in this device!",Toast.LENGTH_SHORT).show()
             }
         }
+        //相簿鍵
         val gallery: TextView = view.findViewById(R.id.gallery)
         gallery.setOnClickListener {
             val intent = Intent(Intent.ACTION_GET_CONTENT)
@@ -419,21 +459,141 @@ class ItemActivity : AppCompatActivity() {
             startActivityForResult(intent, GALLERY_RCODE)
             bottomSheetDialog.dismiss()
         }
+        //圖示鍵
+        val icons:TextView=view.findViewById(R.id.icons)
+        icons.setOnClickListener {
+            showIconsCollection()
+            bottomSheetDialog.dismiss()
+        }
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == CAMERA_RCODE && resultCode == Activity.RESULT_OK && data != null) {
-            val bitmap = data.extras.get("data") as Bitmap
-            imageView_item_icon.setImageBitmap(bitmap)
-        } else if (requestCode == GALLERY_RCODE && resultCode == Activity.RESULT_OK && data != null) {
+           println(data)
+        if (requestCode == CAMERA_RCODE && resultCode == Activity.RESULT_OK ) {
+            //data=null 沒用到沒關係
+            changeIcon=true
+           // val bitmap = data.extras.get("data") as Bitmap
+           // imageView_item_icon.setImageBitmap(bitmap)
+            val resolver = this.contentResolver
+            val uri = Uri.fromFile(myIconPath)
+            val bitmap = MediaStore.Images.Media.getBitmap(resolver, uri)
+            //壓縮
+            setAndCompressPic(bitmap)
+        }
+        else if (requestCode == GALLERY_RCODE && resultCode == Activity.RESULT_OK && data != null) {
+            changeIcon=true
 
             val resolver = this.contentResolver
             val uri = data.data
             val bitmap = MediaStore.Images.Media.getBitmap(resolver, uri)
-            imageView_item_icon.setImageBitmap(bitmap)
-        } else {
+            if(bitmap==null){//選擇了不是image類別檔案
+                Toast.makeText(this,"Not supported image datatype!",Toast.LENGTH_LONG).show()
+            }
+            else {
+                //壓縮
+                setAndCompressPic(bitmap)
+            }
         }
     }
 
+    private fun setAndCompressPic(bitmap: Bitmap) {
+        // 目標長寬
+        val targetW = imageView_item_icon.width.toFloat()
+        val targetH = imageView_item_icon.height.toFloat()
+        // bitmap長寬
+        val photoW = bitmap.width
+        val photoH = bitmap.height
+        // 比例不變下應縮放倍率
+        val scaleFactor = Math.max(photoW / targetW, photoH / targetH)
+            println(scaleFactor)
+        val finalW=Math.round(photoW/scaleFactor)
+        val finalH=Math.round(photoH/scaleFactor)
+        // 縮放至imageview大小
+        imageView_item_icon.setImageBitmap(Bitmap.createScaledBitmap(bitmap,finalW,finalH,false))
+    }
+
+
+    private fun takePictureIntent() {
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(packageManager) != null)
+        {
+            // 照片儲存路徑
+            var photoFile:File? =null
+            try
+            {
+                //檔名
+                val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+                val imageFileName = "JPEG_" + timeStamp + "_"
+                val storageDir = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                 photoFile = File.createTempFile(
+                        imageFileName, /* prefix */
+                        ".jpg", /* suffix */
+                        storageDir /* directory */
+                )
+               myIconPath= photoFile.absoluteFile
+                println(myIconPath)
+            }
+            catch (ex: IOException) {}// Error occurred while creating the File
+            // Continue only if the File was successfully created
+            if (photoFile != null)
+            {
+                val photoURI = FileProvider.getUriForFile(this,
+                        "practice.rimon.countdown.fileprovider",
+                        photoFile)
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                startActivityForResult(takePictureIntent, CAMERA_RCODE)
+
+                val mediaScanIntent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
+                val file = myIconPath
+                val contentUri = Uri.fromFile(file)
+                mediaScanIntent.data = contentUri
+                this.sendBroadcast(mediaScanIntent)
+            }
+        }
+    }
+
+    //檢查權限
+    private fun hasPermissions(context: Context?, vararg permissions: String): Boolean {
+        if (context != null) {
+            for (permission in permissions) {
+                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false
+                }
+            }
+        }
+        return true
+    }
+
+private fun showIconsCollection(){
+
+    val builder = AlertDialog.Builder(this)
+
+    val view_icons= LayoutInflater.from(this).inflate(R.layout.icons_grid,null)
+    val gridView: GridView =view_icons.findViewById(R.id.gridview)
+
+    val icons_array= arrayListOf(
+            R.drawable.app_icon,
+            R.drawable.app_icon_red,
+            R.drawable.app_icon_org,
+            R.drawable.app_icon_green,
+            R.drawable.app_icon_yellow,
+            R.drawable.app_icon_purple,
+            R.drawable.app_icon_navy,
+            R.drawable.app_icon_grey,
+            R.drawable.app_icon_pink
+    )
+    gridView.adapter = ImageAdapter(this,icons_array)
+
+    builder.setView(view_icons)
+    builder.setTitle("圖示集")
+    val icon_dialog=builder.show()
+
+    gridView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+        changeIcon=true
+        imageView_item_icon.setImageResource(icons_array[position])
+        icon_dialog.dismiss()
+    }
+}
 }

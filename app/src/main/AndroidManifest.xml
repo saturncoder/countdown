@@ -6,6 +6,11 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <!--要求相機權限-->
     <uses-permission android:name="android.permission.CAMERA" />
+    <!--要求儲存權限-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!--說明會用到相機，沒有相機也可下載-->
+    <uses-feature android:name="android.hardware.camera"
+        android:required="false" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -52,7 +57,16 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".ThemeActivity"></activity>
+        <activity android:name=".ThemeActivity" />
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="practice.rimon.countdown.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 
 </manifest>

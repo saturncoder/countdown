@@ -30,7 +30,7 @@ class ItemDAO(context: Context) {
         // 使用上面宣告的變數建立表格的SQL敘述
         val CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
                 KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                ICON_COLUMN + " INTEGER NOT NULL, " +
+                ICON_COLUMN + " BLOB, " +
                 TITLE_COLUMN + " TEXT NOT NULL, " +
                 EVENTDATETIME_COLUMN + " INTEGER NOT NULL,"+
                 ALARMDATETIME_COLUMN + " INTEGER NOT NULL,"+
@@ -176,7 +176,7 @@ class ItemDAO(context: Context) {
         val result = Item()
 
         result.id = cursor.getLong(0) //注意欄位編號
-        result.item_icon = cursor.getInt(1)
+        result.item_icon = cursor.getBlob(1)
         result.item_title = cursor.getString(2)
         result.eventDatetime = cursor.getLong(3)
         result.alarmDatetime = cursor.getLong(4)
@@ -190,9 +190,9 @@ class ItemDAO(context: Context) {
 
     // 建立範例資料
     fun createSampleData() {
-        val item = Item(0, R.drawable.test, "考試", 1528609900000,0,0,0,0,"")
-        val item2 = Item(1, R.drawable.test, "回家", 1529709900000,0,0,0,0,"")
-        val item3 = Item(2, R.drawable.test, "旅遊", 1528508900000,0,0,0,0,"")
+        val item = Item(0, byteArrayOf(), "考試", 1528609900000,0,0,0,0,"")
+        val item2 = Item(1, byteArrayOf(), "回家", 1529709900000,0,0,0,0,"")
+        val item3 = Item(2, byteArrayOf(), "旅遊", 1528508900000,0,0,0,0,"")
 
         insert(item)
         insert(item2)

@@ -4,6 +4,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.support.design.widget.Snackbar
 import android.support.v7.widget.GridLayoutManager
@@ -138,6 +139,14 @@ val currenttime=Calendar.getInstance()
                         itemView.notif_icon.visibility=View.VISIBLE
                     }
                     else{itemView.notif_icon.visibility=View.INVISIBLE}
+
+                    if(item.item_icon.isEmpty()){
+                        Log.e("沒設icon","顯示預設圖示")
+                    }
+                    else if(item.item_icon.isNotEmpty()){
+                        val img=BitmapFactory.decodeByteArray(item.item_icon,0,item.item_icon.size)
+                        itemView.imageView_itemIcon.setImageBitmap(img)
+                    }
 
                 }
                 2->{
