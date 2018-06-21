@@ -228,7 +228,9 @@ class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
         //如果有自訂的分類項目，加入左側選單
         category_num=stored_category.size
         if(category_num>5){
-            val category_icons= arrayOf(R.drawable.ic_looks_one_black_24dp,R.drawable.ic_looks_two_black_24dp,R.drawable.ic_looks_3_black_24dp)
+            val category_icons= arrayOf(R.drawable.ic_looks_one_black_24dp,
+                    R.drawable.ic_looks_two_black_24dp,
+                    R.drawable.ic_looks_3_black_24dp)
             for(i in 5 until  category_num){
                 //groupId ,itemId ,order(weight) ,title    要定位到同個menu
                 val item=navigation_view.menu.getItem(0).subMenu.add(R.id.group1,i,1,stored_category[i])
@@ -489,6 +491,9 @@ class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
             intent.putExtra("title", item.item_title)
             intent.putExtra("item_id", item.id)
             intent.putExtra("item_eventDatetime",item.eventDatetime)
+            intent.putExtra("item_alarmInterval",item.alarmInterval)
+            intent.putExtra("item_alarmdays",item.alarmDays)
+
             val broadcastCODE = item.id.toInt()
             Log.e("提醒的requestcode", "$broadcastCODE")
             val pendingIntent = PendingIntent.getBroadcast(this, broadcastCODE, intent, PendingIntent.FLAG_UPDATE_CURRENT)

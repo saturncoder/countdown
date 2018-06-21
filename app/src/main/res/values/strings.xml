@@ -2,6 +2,10 @@
     <string name="app_name">countdown</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="enterTitle">Title</string>
+    <string name="pickAdate">Pick a date</string>
+    <string name="defaultDaysLeft">0 Day</string>
+    <string name="memo">Memo</string>
 
     <string-array name="notify_minutes_array">
         <item>五分鐘</item>
@@ -18,9 +22,20 @@
     </string-array>
     <string-array name="reminder_interval">
         <item>每日</item>
-        <item>每周</item>
-        <item>每月</item>
-        <item>每年</item>
-        <item>當天</item>
+        <item>週一至週五</item>
+        <item>自訂</item>
     </string-array>
+    <string-array name="reminder_days">
+        <item>星期一</item>
+        <item>星期二</item>
+        <item>星期三</item>
+        <item>星期四</item>
+        <item>星期五</item>
+        <item>星期六</item>
+        <item>星期日</item>
+    </string-array>
+    <string name="everyday">Everyday</string>
+    <string name="notification">Notification</string>
+    <string name="unsorted">Unsorted</string>
+
 </resources>

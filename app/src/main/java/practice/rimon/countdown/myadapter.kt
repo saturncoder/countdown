@@ -15,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.layout_item_grid.view.*
 import kotlinx.android.synthetic.main.layout_item_list.view.*
+import java.text.SimpleDateFormat
 import java.util.*
 
 /**
@@ -27,7 +28,10 @@ class myAdapter(val mydata:ArrayList<Item>,
                 val itemDAO: ItemDAO,
                 val clickListener: (Int) -> Unit):
                                         RecyclerView.Adapter<myAdapter.viewholder>(),ItemTouchHelperAdapter {
+
 val currenttime=Calendar.getInstance()
+val timeFormat = SimpleDateFormat("yyyy-MM-dd",Locale.getDefault())
+
     //滑動時的行為
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int, position: Int) {
         if (viewHolder is myAdapter.viewholder) {
@@ -132,8 +136,11 @@ val currenttime=Calendar.getInstance()
                     itemView.textView_itemTitle_list.text=item.item_title
                     val daysbetween= timeToDays(item.eventDatetime)
                     itemView.textView_itemDaysBetween_list.text=daysbetween.toString()
-                    //會有問題  要改掉
-                    //itemView.imageView_itemIcon.setImageResource(item.item_icon)
+                    //事件時間
+                    //讀出事件時間並以特定格式顯示
+                    val eventTime=Calendar.getInstance()
+                    eventTime.timeInMillis=item.eventDatetime
+                    itemView.textView_eventTime_list.text=timeFormat.format(eventTime.time)
                     //已過期提醒不顯示
                     if(item.alarmDatetime!=0L&& item.alarmDatetime-23L*60L*60L*1000L>currenttime.timeInMillis){
                         itemView.notif_icon.visibility=View.VISIBLE

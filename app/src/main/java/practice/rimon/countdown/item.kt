@@ -14,6 +14,7 @@ class Item: java.io.Serializable  {
     var alarmInterval:Long=0
     var category:Int=0
     var memo:String=""
+    var alarmDays:String="0123456"
 
     constructor() {
         item_icon = byteArrayOf()
@@ -24,11 +25,12 @@ class Item: java.io.Serializable  {
         alarmInterval=0L
         category=0
         memo=""
+        alarmDays="0123456"
     }
 
     constructor(id: Long, item_icon:ByteArray, item_title:String, eventDatetime:Long
                 ,alarmDatetime:Long, alarmAt:Long, alarmInterval:Long
-                ,category:Int,memo:String) {
+                ,category:Int,memo:String,alarmDays:String) {
         this.id = id
         this.item_icon=item_icon
         this.item_title=item_title
@@ -38,5 +40,6 @@ class Item: java.io.Serializable  {
         this.alarmInterval=alarmInterval
         this.category=category
         this.memo=memo
+        this.alarmDays=alarmDays
     }
 }

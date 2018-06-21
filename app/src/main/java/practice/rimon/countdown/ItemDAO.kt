@@ -26,6 +26,7 @@ class ItemDAO(context: Context) {
         val ALARMINTERVAL_COLUMN="alarminterval"
         val CATEGORY_COLUMN="category"
         val MEMO_COLUMN="memo"
+        val ALARMDAYS_COLUMN="alarmdays"
 
         // 使用上面宣告的變數建立表格的SQL敘述
         val CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
@@ -37,7 +38,8 @@ class ItemDAO(context: Context) {
                 ALARMAT_COLUMN + " INTEGER NOT NULL,"+
                 ALARMINTERVAL_COLUMN + " INTEGER NOT NULL,"+
                 CATEGORY_COLUMN+" INTEGER NOT NULL,"+
-                MEMO_COLUMN+" TEXT NOT NULL)"
+                MEMO_COLUMN+" TEXT NOT NULL,"+
+                ALARMDAYS_COLUMN+" TEXT NOT NULL)"
     }
 
     // 資料庫物件 writableDatabase
@@ -138,6 +140,7 @@ class ItemDAO(context: Context) {
         cv.put(ALARMINTERVAL_COLUMN,item.alarmInterval)
         cv.put(CATEGORY_COLUMN,item.category)
         cv.put(MEMO_COLUMN,item.memo)
+        cv.put(ALARMDAYS_COLUMN,item.alarmDays)
     }
 
     // 刪除指定參數編號的資料
@@ -184,15 +187,16 @@ class ItemDAO(context: Context) {
         result.alarmInterval=cursor.getLong(6)
         result.category=cursor.getInt(7)
         result.memo=cursor.getString(8)
+        result.alarmDays=cursor.getString(9)
         // 回傳結果
         return result
     }
 
     // 建立範例資料
     fun createSampleData() {
-        val item = Item(0, byteArrayOf(), "考試", 1528609900000,0,0,0,0,"")
-        val item2 = Item(1, byteArrayOf(), "回家", 1529709900000,0,0,0,0,"")
-        val item3 = Item(2, byteArrayOf(), "旅遊", 1528508900000,0,0,0,0,"")
+        val item = Item(0, byteArrayOf(), "考試", 1528609900000,0,0,0,0,"","0123456")
+        val item2 = Item(1, byteArrayOf(), "回家", 1529709900000,0,0,0,0,"","0235")
+        val item3 = Item(2, byteArrayOf(), "旅遊", 1528508900000,0,0,0,0,"","542")
 
         insert(item)
         insert(item2)

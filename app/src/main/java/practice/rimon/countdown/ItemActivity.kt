@@ -11,6 +11,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.graphics.PorterDuff
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
@@ -61,7 +62,9 @@ class ItemActivity : AppCompatActivity(){
     var changeIcon=false
     //照相的話原檔的儲存路徑
     var myIconPath : File? =null
-
+    var selectedDays= arrayListOf(0,1,2,3,4,5,6)
+    lateinit var reminderIntervalArray:Array<String>
+    lateinit var alarmDaysBooleanArray:BooleanArray
     override fun onCreate(savedInstanceState: Bundle?) {
 
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
@@ -90,8 +93,8 @@ class ItemActivity : AppCompatActivity(){
         //讀出已儲存 分類陣列
         stored_category=getArrayList("category",this)
         println(stored_category)
-
-
+        alarmDaysBooleanArray= booleanArrayOf(true,true,true,true,true,true,true)
+        reminderIntervalArray= resources.getStringArray(R.array.reminder_interval)
         registerListener()//注意順序 clickable etc
         //清空category
         //PreferenceManager.getDefaultSharedPreferences(this).edit().remove("category").apply()
@@ -161,8 +164,39 @@ class ItemActivity : AppCompatActivity(){
                 //沒改的話直接存
                 item.item_icon=itemselected.item_icon
             }
+            //自訂提醒日
+            val alarmDays=itemselected.alarmDays
+
+            alarmDaysBooleanArray= booleanArrayOf(
+                    alarmDays.contains("0"),alarmDays.contains("1"),alarmDays.contains("2"),alarmDays.contains("3"),
+                    alarmDays.contains("4"),alarmDays.contains("5"),alarmDays.contains("6"))
+            item.alarmDays=itemselected.alarmDays
+
+            //若未更改提醒間隔，儲存原來提醒間隔
+            item.alarmInterval=itemselected.alarmInterval
+            if(itemselected.alarmInterval.toInt()==2){
+                var days=""
+                val daysStringArray=resources.getStringArray(R.array.reminder_days)
+                selectedDays.clear()
+                for(i in 0 until alarmDaysBooleanArray.size){
+                    if(alarmDaysBooleanArray[i]){
+                        days=days+" "+daysStringArray[i]
+                        selectedDays.add(i)
+                    }
+                }
+                reminder_interval.text =days
+
+            }
+            else {
+                reminder_interval.text = reminderIntervalArray[itemselected.alarmInterval.toInt()]
+            }
+
+            if(itemselected.alarmInterval.toInt()==1 ){
+                selectedDays= arrayListOf(0,1,2,3,4)
+            }
 
         }
+
 
 
     }
@@ -177,6 +211,26 @@ class ItemActivity : AppCompatActivity(){
         editText_memo.imeOptions=EditorInfo.IME_ACTION_DONE
         editText_memo.setRawInputType(InputType.TYPE_CLASS_TEXT)
         imageView_item_icon.setOnClickListener(itemIconOnClickListener)
+        imageView_item_icon.setOnTouchListener { view, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    //overlay is black with transparency of 0x77 (119)
+                    imageView_item_icon.drawable.setColorFilter(0x33000000, PorterDuff.Mode.SRC_ATOP)
+                    view.invalidate()
+                    return@setOnTouchListener false
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    //clear the overlay
+                    imageView_item_icon.drawable.clearColorFilter()
+                    view.invalidate()
+                    return@setOnTouchListener false
+                }
+                else->return@setOnTouchListener false
+
+            }
+
+
+        }
     }
     //右上menu
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -296,30 +350,71 @@ class ItemActivity : AppCompatActivity(){
     }
     //提醒間距 還沒做
     private val reminderIntervalOnClickListener=View.OnClickListener {
-        val reminderIntervalArray= resources.getStringArray(R.array.reminder_interval)
+
         val builder = AlertDialog.Builder(this)
         builder.setTitle("選擇提醒頻率")
-        builder.setSingleChoiceItems(R.array.reminder_interval,getSelectedItem(), { dialogInterface, i ->
+        builder.setSingleChoiceItems(R.array.reminder_interval,item.alarmInterval.toInt()) { dialogInterface, i ->
+            var intervalDays=""
             reminder_interval.text=reminderIntervalArray[i]
-            saveSelectedItem(i)
+            when(i){
+                0->{item.alarmInterval=0
+                    intervalDays="0123456"
+                    item.alarmDays=intervalDays
+                }
+                1->{item.alarmInterval=1
+                    intervalDays="01234"
+                    item.alarmDays=intervalDays
+                }
+                2->{item.alarmInterval=2
+                    val innerbuilder = AlertDialog.Builder(this)
+
+                        innerbuilder.setMultiChoiceItems(R.array.reminder_days,
+                            alarmDaysBooleanArray){ dialog, which, isChecked ->
+
+                            if(isChecked){selectedDays.add(which)}
+                            else if(selectedDays.contains(which)){
+                                selectedDays.remove(which)
+                            }
+                        println(selectedDays)
+                        }
+
+                    innerbuilder.setPositiveButton("確定"){dialog, which ->
+                        selectedDays.forEach { i->
+                            i.toString()
+                            intervalDays += i
+
+                        }
+                        println(intervalDays)
+                        item.alarmDays=intervalDays
+                    //轉成文字顯示
+                        alarmDaysBooleanArray= booleanArrayOf(intervalDays.contains("0"),intervalDays.contains("1"),intervalDays.contains("2"),intervalDays.contains("3"),
+                                intervalDays.contains("4"),intervalDays.contains("5"),intervalDays.contains("6"))
+                        var days=""
+                        val daysStringArray=resources.getStringArray(R.array.reminder_days)
+                        for( _i in 0 until alarmDaysBooleanArray.size){
+                            if(alarmDaysBooleanArray[_i]){
+                                days=days+" "+daysStringArray[_i]
+                            }
+                        }
+                        reminder_interval.text =days
+
+                    }
+
+
+                    innerbuilder.setNegativeButton("取消"){dialog, which ->  }
+                    innerbuilder.create().show()
+                }
+            }
+
+
+
             dialogInterface.dismiss()
-        })
+        }
 
         val alertDialog=builder.create()
         alertDialog.show()
     }
-    //保留使用者選擇
-    private fun getSelectedItem(): Int {
-        val sharedPreference = PreferenceManager.getDefaultSharedPreferences(this)
-        return sharedPreference.getInt("selectedInterval", 0) //第二個參數:default
-    }
-    private fun saveSelectedItem(i: Int) {
-        val sharedPreference = PreferenceManager.getDefaultSharedPreferences(this)
-        val sharedPrefEditor=sharedPreference.edit()
 
-        sharedPrefEditor.putInt("selectedInterval", i)
-        sharedPrefEditor.apply()
-    }
     //按下選擇分類鍵
     private val categoryOnClickListener=View.OnClickListener{
 
@@ -334,7 +429,7 @@ class ItemActivity : AppCompatActivity(){
         }
         arrayAdapter.add("新增分類...")
 
-        builder.setSingleChoiceItems(arrayAdapter,item.category,{dialogInterface, i ->
+        builder.setSingleChoiceItems(arrayAdapter,item.category) { dialogInterface, i ->
             //如果選擇最後一個(新增分類...)
             if(i==arrayAdapter.count-1){
                 if(stored_category.size>=8){
@@ -384,7 +479,7 @@ class ItemActivity : AppCompatActivity(){
                 dialogInterface.dismiss()
             }
 
-        })
+        }
 
         builder.show()
 
