@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:id="@+id/group_category">
-        <item android:title="Category">
+        <item android:title="@string/category">
             <menu>
                 <group
                     android:id="@+id/group1"
@@ -11,27 +11,27 @@
                     <item
                         android:id="@+id/category_all"
                         android:icon="@drawable/ic_home_black_24dp"
-                        android:title="全部" />
+                        android:title="@string/all" />
                     <item
                         android:id="@+id/category_unsorted"
                         android:icon="@drawable/ic_unarchive_black_24dp"
-                        android:title="未分類" />
+                        android:title="@string/unsorted" />
                     <item
                         android:id="@+id/category1"
                         android:icon="@drawable/ic_people_black_24dp"
-                        android:title="生活" />
+                        android:title="@string/life" />
                     <item
                         android:id="@+id/category2"
                         android:icon="@drawable/ic_work_black_24dp"
-                        android:title="工作" />
+                        android:title="@string/work" />
                     <item
                         android:id="@+id/category3"
                         android:icon="@drawable/ic_school_black_24dp"
-                        android:title="考試" />
+                        android:title="@string/exam" />
                     <item
                         android:id="@+id/category4"
                         android:icon="@drawable/ic_favorite_black_24dp"
-                        android:title="紀念日" />
+                        android:title="@string/anniversary" />
                 </group>
             </menu>
         </item>
@@ -42,18 +42,18 @@
         <item
             android:id="@+id/theme"
             android:icon="@drawable/ic_palette_black_24dp"
-            android:title="主題" />
+            android:title="@string/theme" />
         <item
             android:id="@+id/settings"
             android:icon="@drawable/ic_settings_black_24dp"
-            android:title="設定" />
+            android:title="@string/settings" />
         <item
             android:id="@+id/feedback"
             android:icon="@drawable/ic_feedback_black_24dp"
-            android:title="回饋意見" />
+            android:title="@string/feedback" />
         <item
             android:id="@+id/aboutAPP"
-            android:icon="@drawable/ic_settings_black_24dp"
-            android:title="關於" />
+            android:icon="@drawable/ic_info_black_24dp"
+            android:title="@string/about" />
     </group>
 </menu>

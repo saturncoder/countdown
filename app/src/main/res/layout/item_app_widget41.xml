@@ -1,0 +1,33 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/widgetLL"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:padding="@dimen/widget_margin">
+
+    <TextView
+        android:id="@+id/appwidget_title"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        android:autoSizeTextType="uniform"
+        android:background="@android:color/transparent"
+        android:gravity="center"
+        android:text="title"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:autoSizeMaxTextSize="@dimen/widget_maxTextSize" />
+
+    <TextView
+        android:id="@+id/appwidget_days"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:autoSizeTextType="uniform"
+        android:gravity="center"
+
+        android:text="0"
+        android:autoSizeMaxTextSize="@dimen/widget_maxTextSize" />
+
+</LinearLayout>

@@ -4,21 +4,23 @@
 
     <!-- 接收開機完成廣播事件 -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <!--要求相機權限-->
+    <!-- 要求相機權限 -->
     <uses-permission android:name="android.permission.CAMERA" />
-    <!--要求儲存權限-->
+    <!-- 要求儲存權限 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!--說明會用到相機，沒有相機也可下載-->
-    <uses-feature android:name="android.hardware.camera"
+    <!-- 說明會用到相機，沒有相機也可下載 -->
+    <uses-feature
+        android:name="android.hardware.camera"
         android:required="false" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
             android:theme="@style/StartTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,7 +28,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ItemActivity"
+        <activity
+            android:name=".ItemActivity"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="practice.rimon.countdown.ADD_ITEM" />
@@ -58,6 +61,7 @@
         </receiver>
 
         <activity android:name=".ThemeActivity" />
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="practice.rimon.countdown.fileprovider"
@@ -67,6 +71,45 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+        <!-- 小工具元件 -->
+        <receiver android:name=".ItemAppWidget4to1"
+            android:label="@string/Widget_4to1">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/item_app_widget41_info" />
+        </receiver>
+
+        <activity android:name=".ItemAppWidgetConfigureActivity">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
+        <receiver android:name=".ItemAppWidget1to1"
+            android:label="@string/Widget_1to1">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/item_app_widget11_info" />
+        </receiver>
+
+        <receiver
+            android:name=".WidgetAlarmReceiver"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity android:name=".AboutActivity" />
+
+
+
+
     </application>
 
 </manifest>

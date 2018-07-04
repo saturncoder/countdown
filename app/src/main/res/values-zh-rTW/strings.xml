@@ -8,4 +8,16 @@
     <string name="everyday">每日</string>
     <string name="memo">備忘錄</string>
     <string name="defaultDaysLeft">0 天</string>
+    <string name="all">全部</string>
+    <string name="life">生活</string>
+    <string name="work">工作</string>
+    <string name="exam">考試</string>
+    <string name="anniversary">紀念日</string>
+    <string name="theme">主題</string>
+    <string name="settings">設定</string>
+    <string name="feedback">回饋意見</string>
+    <string name="about">關於</string>
+    <string name="left">剩下</string>
+    <string name="day_unit">天</string>
+    <string name="left_en">"  "</string>
 </resources>

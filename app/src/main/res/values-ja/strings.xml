@@ -5,4 +5,14 @@
     <string name="defaultDaysLeft">0 日</string>
     <string name="memo">メモ</string>
     <string name="everyday">毎日</string>
+    <string name="life">生活</string>
+    <string name="work">仕事</string>
+    <string name="anniversary">記念日</string>
+    <string name="settings">設定</string>
+    <string name="all">全部</string>
+    <string name="exam">試験</string>
+    <string name="feedback">フィードバック</string>
+    <string name="left">残り：</string>
+    <string name="day_unit">日</string>
+    <string name="left_en">" "</string>
 </resources>

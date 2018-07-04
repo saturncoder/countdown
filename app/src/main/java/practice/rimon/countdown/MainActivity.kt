@@ -6,6 +6,8 @@ import android.app.AlertDialog
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.support.design.widget.NavigationView
@@ -211,10 +213,10 @@ class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
             itemDAO.createSampleData()
         }
 
-        myadapter=myAdapter(mydata,gridlayoutmanager,recyclerview,itemDAO,{ position:Int->
+        myadapter=myAdapter(mydata,gridlayoutmanager,recyclerview,itemDAO) { position:Int->
             Log.e("clicklistener", "Clicked on item $position")
             itemClickHandler(position)
-        })
+        }
 
         val callback=ItemTouchHelperCallback(myadapter)
         val itemTouchHelper= ItemTouchHelper(callback)
@@ -385,6 +387,19 @@ class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
             R.id.theme-> {
                 val intent=Intent(this,ThemeActivity::class.java)
                 startActivityForResult(intent,themeActivityCode)
+            }
+            R.id.feedback->{
+                val deviceName=getDeviceName()
+                val intent = Intent(Intent.ACTION_SENDTO)
+                intent.data = Uri.parse("mailto:saturncoder@gmail.com")
+                intent.putExtra(Intent.EXTRA_SUBJECT, "[Countdown] User feedback")
+                intent.putExtra(Intent.EXTRA_TEXT,"\n\n\n----------\n" +
+                        "Device:$deviceName\n" +
+                        "Android Version:${android.os.Build.VERSION.SDK_INT}")
+                startActivity(intent)
+            }
+            R.id.aboutAPP->{
+                startActivity(Intent(this,AboutActivity::class.java))
             }
 
         }
@@ -564,5 +579,32 @@ class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
         val editor = prefs.edit()
         editor.putInt("toCategory", which)
         editor.apply()
+    }
+    private fun getDeviceName():String {
+        val manufacturer = Build.MANUFACTURER
+        val model = Build.MODEL
+        if (model.toLowerCase().startsWith(manufacturer.toLowerCase()))
+        {
+            return capitalize(model)
+        }
+        else
+        {
+            return capitalize(manufacturer) + " " + model
+        }
+    }
+    private fun capitalize(s:String):String {
+        if (s == null || s.length == 0)
+        {
+            return ""
+        }
+        val first = s.get(0)
+        if (Character.isUpperCase(first))
+        {
+            return s
+        }
+        else
+        {
+            return Character.toUpperCase(first) + s.substring(1)
+        }
     }
 }

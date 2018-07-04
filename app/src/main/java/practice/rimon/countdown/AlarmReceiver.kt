@@ -65,11 +65,15 @@ class AlarmReceiver : BroadcastReceiver() {
         val pendingIntent= PendingIntent.getActivity(context,2001,intent,
                 PendingIntent.FLAG_UPDATE_CURRENT)
 
+        val left=context.resources.getString(R.string.left)
+        val left_en=context.resources.getString(R.string.left_en)
+        val day_string=context.resources.getString(R.string.day_unit)
+
         val notification = NotificationCompat.Builder(context, "channelID")
                 .setSmallIcon(R.drawable.app_icon_notif2)
                 //.setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.penguin))
                 .setContentTitle(title)
-                .setContentText("剩下 $daysbetween 天")
+                .setContentText("$left $daysbetween $day_string $left_en")
                 //.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE))
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)

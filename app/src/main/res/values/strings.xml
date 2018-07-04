@@ -21,9 +21,9 @@
 
     </string-array>
     <string-array name="reminder_interval">
-        <item>每日</item>
-        <item>週一至週五</item>
-        <item>自訂</item>
+        <item>@string/everyday</item>
+        <item>@string/mon2fri</item>
+        <item>@string/customDays</item>
     </string-array>
     <string-array name="reminder_days">
         <item>星期一</item>
@@ -35,7 +35,28 @@
         <item>星期日</item>
     </string-array>
     <string name="everyday">Everyday</string>
+    <string name="mon2fri">Monday to Friday</string>
+    <string name="customDays">Custom</string>
     <string name="notification">Notification</string>
     <string name="unsorted">Unsorted</string>
+    <string name="category">Category</string>
+    <string name="all">All</string>
+
+    <string name="life">Life</string>
+    <string name="work">Work</string>
+    <string name="exam">Exam</string>
+    <string name="anniversary">Anniversary</string>
+    <string name="theme">Theme</string>
+    <string name="settings">Settings</string>
+    <string name="feedback">Feedback</string>
+    <string name="about">About</string>
+    <string name="done">Done</string>
+    <string name="day_unit">days</string>
+    <string name="left_en">left</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="configure">Configure</string>
+    <string name="add_widget">Add widget</string>
+    <string name="Widget_4to1">widget_4to1</string>
+    <string name="Widget_1to1">widget_1to1</string>
 
 </resources>
