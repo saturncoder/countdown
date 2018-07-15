@@ -10,7 +10,9 @@ fun getArrayList(key: String,context:Context): ArrayList<String> {
     val gson = Gson()
     val json = prefs.getString(key, "")
     if (json.isEmpty()){
-        return arrayListOf("未分類","生活","工作","考試","紀念日")
+        return arrayListOf(context.getString(R.string.unsorted),context.getString(R.string.life),
+                            context.getString(R.string.work),context.getString(R.string.exam),
+                             context.getString(R.string.anniversary))
     }
     else {
         val type = object : TypeToken<ArrayList<String>>() {}.type

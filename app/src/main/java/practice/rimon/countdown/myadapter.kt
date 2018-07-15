@@ -7,6 +7,7 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.support.design.widget.Snackbar
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -26,6 +27,7 @@ class myAdapter(val mydata:ArrayList<Item>,
                 val layoutmanager: GridLayoutManager,
                 val recyclerView: RecyclerView,
                 val itemDAO: ItemDAO,
+                val context:Context,
                 val clickListener: (Int) -> Unit):
                                         RecyclerView.Adapter<myAdapter.viewholder>(),ItemTouchHelperAdapter {
 
@@ -44,8 +46,8 @@ val timeFormat = SimpleDateFormat("yyyy-MM-dd",Locale.getDefault())
             onItemDissmiss(viewHolder.getAdapterPosition())
             Log.e("adapter","移除項目$deletedIndex ,adapter剩下:${mydata.size}個")
             // showing snack bar with Undo option
-            val snackbar = Snackbar.make(recyclerView, "Item removed !", Snackbar.LENGTH_LONG)
-            snackbar.setAction("UNDO") {
+            val snackbar = Snackbar.make(recyclerView, context.getString(R.string.itemRemoved), Snackbar.LENGTH_LONG)
+            snackbar.setAction(context.getString(R.string.undo)) {
                 // undo is selected, restore the deleted item
                 restoreItem(deletedItem, deletedIndex)
                 recyclerView.smoothScrollToPosition(deletedIndex)
@@ -136,6 +138,12 @@ val timeFormat = SimpleDateFormat("yyyy-MM-dd",Locale.getDefault())
                     itemView.textView_itemTitle_list.text=item.item_title
                     val daysbetween= timeToDays(item.eventDatetime)
                     itemView.textView_itemDaysBetween_list.text=daysbetween.toString()
+                    if(daysbetween<0){
+                        itemView.textView_itemDaysBetween_list.setTextColor(Color.RED)
+                    }
+                    else if(daysbetween>=0){
+                        itemView.textView_itemDaysBetween_list.setTextColor(ContextCompat.getColor(context,R.color.greenPrimary))
+                    }
                     //事件時間
                     //讀出事件時間並以特定格式顯示
                     val eventTime=Calendar.getInstance()
@@ -144,6 +152,7 @@ val timeFormat = SimpleDateFormat("yyyy-MM-dd",Locale.getDefault())
                     //已過期提醒不顯示
                     if(item.alarmDatetime!=0L&& item.alarmDatetime-23L*60L*60L*1000L>currenttime.timeInMillis){
                         itemView.notif_icon.visibility=View.VISIBLE
+
                     }
                     else{itemView.notif_icon.visibility=View.INVISIBLE}
 
@@ -160,6 +169,18 @@ val timeFormat = SimpleDateFormat("yyyy-MM-dd",Locale.getDefault())
                     itemView.textView_itemTitle_grid.text=item.item_title
                     val daysbetween= timeToDays(item.eventDatetime)
                     itemView.textView_itemDaysBetween_grid.text=daysbetween.toString()
+                    if(daysbetween<0){
+                        itemView.textView_itemDaysBetween_grid.setTextColor(Color.RED)
+                    }
+                    else if(daysbetween>=0){
+                        itemView.textView_itemDaysBetween_grid.setTextColor(ContextCompat.getColor(context,R.color.greenPrimary))
+                    }
+                    //事件時間
+                    //讀出事件時間並以特定格式顯示
+                    val eventTime=Calendar.getInstance()
+                    eventTime.timeInMillis=item.eventDatetime
+                    itemView.textView_eventTime_grid.text=timeFormat.format(eventTime.time)
+                    //已過期提醒不顯示
                     if(item.alarmDatetime!=0L && item.alarmDatetime-23L*60L*60L*1000L>currenttime.timeInMillis){
                         itemView.item_notif_icon.visibility=View.VISIBLE
                     }

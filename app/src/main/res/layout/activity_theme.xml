@@ -28,17 +28,46 @@
 
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight="1.3"
+                android:padding="8dp"
                 app:srcCompat="@drawable/app_icon" />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:orientation="vertical">
 
             <TextView
 
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="2"
+                android:gravity="center_vertical"
                 android:padding="8sp"
                 android:text="birthday party"
-                android:textSize="24sp" />
+                android:textSize="22sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/ic_access_time_black_18dp"
+                android:drawablePadding="8dp"
+                android:gravity="center_vertical"
+                android:paddingStart="8dp"
+                android:text="2019-06-13" />
+        </LinearLayout>
+
+            <ImageView
+
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_weight="0.4"
+                android:paddingBottom="8dp"
+                android:scaleType="centerCrop"
+                android:visibility="visible"
+                app:srcCompat="@drawable/ic_notifications_yellow_24dp" />
 
             <TextView
 
@@ -46,19 +75,9 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="52"
-                android:textColor="@android:color/holo_green_dark"
+                android:text="54"
+                android:textColor="@color/greenPrimary"
                 android:textSize="36sp" />
-
-            <ImageView
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginRight="8dp"
-                android:layout_weight="0.2"
-                android:visibility="visible"
-                app:srcCompat="@drawable/ic_notifications_yellow_24dp" />
 
         </LinearLayout>
     </android.support.v7.widget.CardView>
@@ -68,14 +87,13 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="116dp"
+        android:layout_marginTop="8dp"
         app:cardCornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/cardView_theme">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -86,17 +104,47 @@
 
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/app_icon" />
+                android:layout_weight="1.3"
+                android:padding="8dp"
+                app:srcCompat="@drawable/app_icon_purple" />
 
-            <TextView
-
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
-                android:padding="8sp"
-                android:text="final project due"
-                android:textSize="24sp" />
+                android:orientation="vertical">
+
+                <TextView
+
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="2"
+                    android:gravity="center_vertical"
+                    android:padding="8sp"
+                    android:text="project due"
+                    android:textSize="22sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:drawableLeft="@drawable/ic_access_time_black_18dp"
+                    android:drawablePadding="8dp"
+                    android:gravity="center_vertical"
+                    android:paddingStart="8dp"
+                    android:text="2018-12-07" />
+            </LinearLayout>
+
+            <ImageView
+
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_weight="0.4"
+                android:paddingBottom="8dp"
+                android:scaleType="centerCrop"
+                android:visibility="visible"
+                app:srcCompat="@drawable/ic_notifications_yellow_24dp" />
 
             <TextView
 
@@ -105,18 +153,8 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="16"
-                android:textColor="@android:color/holo_green_dark"
+                android:textColor="@color/greenPrimary"
                 android:textSize="36sp" />
-
-            <ImageView
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginRight="8dp"
-                android:layout_weight="0.2"
-                android:visibility="visible"
-                app:srcCompat="@drawable/ic_notifications_yellow_24dp" />
 
         </LinearLayout>
     </android.support.v7.widget.CardView>
@@ -276,7 +314,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
-        android:text="選擇主題："
+        android:text="@string/chooseTheme"
         android:textColor="@android:color/black"
         android:textSize="26dp"
         app:layout_constraintBottom_toTopOf="@+id/scrollview"

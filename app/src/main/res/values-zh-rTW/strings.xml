@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">countdown</string>
+    <string name="app_name">日日倒數</string>
     <string name="enterTitle">請輸入標題</string>
     <string name="pickAdate">選擇日期</string>
     <string name="unsorted">未分類</string>
@@ -20,4 +20,40 @@
     <string name="left">剩下</string>
     <string name="day_unit">天</string>
     <string name="left_en">"  "</string>
+    <string name="chooseTheme">選擇主題：</string>
+    <string name="pleaseRate">給予五星鼓勵！</string>
+    <string name="coder">作者：saturncoder</string>
+    <string name="version">版本：1.0.0</string>
+    <string name="daysleftSentence">%1$n 天 %2$s</string>
+    <string name="notAvailableForPastEvent">過期事件無法設置提醒</string>
+    <string name="pleaseTypeTitle">請輸入事件名稱</string>
+    <string name="pleaseChooseDate">請選擇事件日期</string>
+    <string name="chooseNotifTime">選擇提醒時間:</string>
+    <string name="chooseNotifFreq">選擇提醒頻率:</string>
+    <string name="confirmButtonText">確定</string>
+    <string name="negativeButtonText">取消</string>
+    <string name="chooseCategory">選擇分類</string>
+    <string name="addaCategory">新增分類...</string>
+    <string name="onlyThreeCategoryAllowed">您只能新增3個自訂分類</string>
+    <string name="errorNotification">提醒</string>
+    <string name="eneterCategoryName">新增分類名稱</string>
+    <string name="pleaseEnterCategoryName">請輸入分類名稱</string>
+    <string name="iconCollection">圖示集</string>
+    <string name="noCameraDetected">此裝置偵測不到相機設備</string>
+    <string name="notSupportedImageDatatype">不支援的圖片格式</string>
+    <string name="deleteCategory">刪除分類</string>
+    <string name="allItemBecomeUnsorted">所有在此分類的項目將被歸回未分類中</string>
+    <string name="editCategoryName">修改分類名稱</string>
+    <string name="undo">復原</string>
+    <string name="itemRemoved">已刪除該項目</string>
+    <string name="noItemNotice">這個分類目前還沒有項目呢\n按右下按鈕新增一個吧!</string>
+    <string name="monday">星期一</string>
+    <string name="tuesday">星期二</string>
+    <string name="wednesday">星期三</string>
+    <string name="thursday">星期四</string>
+    <string name="friday">星期五</string>
+    <string name="saturday">星期六</string>
+    <string name="sunday">星期日</string>
+    <string name="mon2fri">星期一至星期五</string>
+    <string name="customDays">自訂</string>
 </resources>

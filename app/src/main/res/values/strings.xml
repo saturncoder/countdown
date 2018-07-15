@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">countdown</string>
+    <string name="app_name">Countdown</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="enterTitle">Title</string>
@@ -26,13 +26,13 @@
         <item>@string/customDays</item>
     </string-array>
     <string-array name="reminder_days">
-        <item>星期一</item>
-        <item>星期二</item>
-        <item>星期三</item>
-        <item>星期四</item>
-        <item>星期五</item>
-        <item>星期六</item>
-        <item>星期日</item>
+        <item>@string/monday</item>
+        <item>@string/tuesday</item>
+        <item>@string/wednesday</item>
+        <item>@string/thursday</item>
+        <item>@string/friday</item>
+        <item>@string/saturday</item>
+        <item>@string/sunday</item>
     </string-array>
     <string name="everyday">Everyday</string>
     <string name="mon2fri">Monday to Friday</string>
@@ -58,5 +58,39 @@
     <string name="add_widget">Add widget</string>
     <string name="Widget_4to1">widget_4to1</string>
     <string name="Widget_1to1">widget_1to1</string>
+    <string name="chooseTheme">Theme:</string>
+    <string name="coder">Author：saturncoder</string>
+    <string name="pleaseRate">Give a 5-Star Rating!</string>
+    <string name="version">Version：1.0.0</string>
+    <string name="daysleftSentence">%1$n days %2$s</string>
+    <string name="pleaseTypeTitle">Please enter event title!</string>
+    <string name="notAvailableForPastEvent">Notification is not available for past events</string>
+    <string name="noCameraDetected">No camera detected in this device!</string>
+    <string name="notSupportedImageDatatype">Not supported image datatype!</string>
+    <string name="pleaseChooseDate">Please set the event date</string>
+    <string name="onlyThreeCategoryAllowed">Only 3 custom categories are available</string>
+    <string name="chooseNotifTime">Notification time:</string>
+    <string name="chooseNotifFreq">Notification frequence:</string>
+    <string name="confirmButtonText">OK</string>
+    <string name="negativeButtonText">Cancel</string>
+    <string name="chooseCategory">Pick a category</string>
+    <string name="addaCategory">create a new category</string>
+    <string name="errorNotification">Notification</string>
+    <string name="eneterCategoryName">Set the category name</string>
+    <string name="iconCollection">Icon set</string>
+    <string name="pleaseEnterCategoryName">Please enter a category name</string>
+    <string name="deleteCategory">Delete the category</string>
+    <string name="allItemBecomeUnsorted">All items in this category will be sorted to \"Unsroted\" category.</string>
+    <string name="editCategoryName">Enter new category name</string>
+    <string name="itemRemoved">Item removed !</string>
+    <string name="undo">Undo</string>
+    <string name="noItemNotice">There is no item in this category yet. How about create one?</string>
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
+    <string name="sunday">Sunday</string>
 
 </resources>

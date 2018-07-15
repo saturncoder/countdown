@@ -121,7 +121,8 @@ class ItemActivity : AppCompatActivity(){
             textView_item_eventTime.text=timeFormat.format(cal_eventTime.time)
             //以儲存時間推算事件剩餘天數
             val daysbetween =timeToDays(itemselected.eventDatetime)
-            textView_item_daysbetween.text="$daysbetween 天"
+            textView_item_daysbetween.text="$daysbetween "+this.getString(R.string.day_unit)
+
             //讀出已儲存分類
             textView_item_category.text=stored_category[itemselected.category]
             //讀出已儲存備忘錄
@@ -268,7 +269,7 @@ class ItemActivity : AppCompatActivity(){
             item.alarmDatetime = item.eventDatetime
             //若選擇的日期是過去的時間，則不能設提醒
             if(item.alarmDatetime-23L*60L*60L*1000L<=calendar.timeInMillis){
-                Toast.makeText(this,"過期事件無法設置提醒",Toast.LENGTH_LONG).show()
+                Toast.makeText(this,getString(R.string.notAvailableForPastEvent),Toast.LENGTH_LONG).show()
                 switch_reminder.isChecked=false
                 reminder_interval.isClickable=false
                 reminder_time.isClickable=false
@@ -280,7 +281,7 @@ class ItemActivity : AppCompatActivity(){
         }
         //更新剩餘天數
         val daysbetween= timeToDays(eventDate_mills)
-        textView_item_daysbetween.text="$daysbetween 天"
+        textView_item_daysbetween.text="$daysbetween "+this.getString(R.string.day_unit)
 
         if(switch_reminder.isChecked) {
             switch_reminder.isChecked = false
@@ -290,11 +291,11 @@ class ItemActivity : AppCompatActivity(){
     private fun comfirmItem(){
         //檢查事件標題是否為空
         if(TextUtils.isEmpty(editText_item_title.text.toString().trim())){
-            Toast.makeText(this, "請輸入事件名稱", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.pleaseTypeTitle), Toast.LENGTH_LONG).show()
         }
         //檢查是否選擇事件日期  (用預設值是0L來檢查)
         else if (item.eventDatetime==0L){
-            Toast.makeText(this, "請選擇事件日期", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.pleaseChooseDate), Toast.LENGTH_LONG).show()
         }
         else {
             if(changeIcon) {//跟當次比，編輯項目若沒改已直接存，不經過這裡
@@ -335,7 +336,7 @@ class ItemActivity : AppCompatActivity(){
     private val reminderTimeOnClickListener=View.OnClickListener {view->
         val timePickerDialog=TimePickerDialog(this, android.R.style.Theme_Holo_Light_Dialog,timeSetListener,0,0,true)
         timePickerDialog.window.setBackgroundDrawableResource(android.R.color.transparent)
-        timePickerDialog.setTitle("選擇提醒時間:")
+        timePickerDialog.setTitle(getString(R.string.chooseNotifTime))
         timePickerDialog.show()
     }
     private val timeSetListener=TimePickerDialog.OnTimeSetListener{view,hourofday,minute->
@@ -352,7 +353,7 @@ class ItemActivity : AppCompatActivity(){
     private val reminderIntervalOnClickListener=View.OnClickListener {
 
         val builder = AlertDialog.Builder(this)
-        builder.setTitle("選擇提醒頻率")
+        builder.setTitle(getString(R.string.chooseNotifFreq))
         builder.setSingleChoiceItems(R.array.reminder_interval,item.alarmInterval.toInt()) { dialogInterface, i ->
             var intervalDays=""
             reminder_interval.text=reminderIntervalArray[i]
@@ -378,7 +379,7 @@ class ItemActivity : AppCompatActivity(){
                         println(selectedDays)
                         }
 
-                    innerbuilder.setPositiveButton("確定"){dialog, which ->
+                    innerbuilder.setPositiveButton(getString(R.string.confirmButtonText)){ dialog, which ->
                         selectedDays.forEach { i->
                             i.toString()
                             intervalDays += i
@@ -401,7 +402,7 @@ class ItemActivity : AppCompatActivity(){
                     }
 
 
-                    innerbuilder.setNegativeButton("取消"){dialog, which ->  }
+                    innerbuilder.setNegativeButton(getString(R.string.negativeButtonText)){ dialog, which ->  }
                     innerbuilder.create().show()
                 }
             }
@@ -419,7 +420,7 @@ class ItemActivity : AppCompatActivity(){
     private val categoryOnClickListener=View.OnClickListener{
 
         val builder = AlertDialog.Builder(this)
-        builder.setTitle("選擇分類")
+        builder.setTitle(getString(R.string.chooseCategory))
         builder.setIcon(R.drawable.ic_tag_grey_24dp)
         //用來給選單顯示的adapter
         val arrayAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_single_choice)
@@ -427,16 +428,16 @@ class ItemActivity : AppCompatActivity(){
         for(i in stored_category){
             arrayAdapter.add(i)
         }
-        arrayAdapter.add("新增分類...")
+        arrayAdapter.add(getString(R.string.addaCategory))
 
         builder.setSingleChoiceItems(arrayAdapter,item.category) { dialogInterface, i ->
             //如果選擇最後一個(新增分類...)
             if(i==arrayAdapter.count-1){
                 if(stored_category.size>=8){
                     val builderalert = AlertDialog.Builder(this)
-                    builderalert.setTitle("提醒")
-                    builderalert.setMessage("您只能新增3個自訂分類")
-                    builderalert.setPositiveButton("確定",{_ ,_->})
+                    builderalert.setTitle(getString(R.string.errorNotification))
+                    builderalert.setMessage(getString(R.string.onlyThreeCategoryAllowed))
+                    builderalert.setPositiveButton(getString(R.string.confirmButtonText),{_ ,_->})
                     builderalert.create().show()
 
                 }
@@ -445,18 +446,18 @@ class ItemActivity : AppCompatActivity(){
                     val builderinner = AlertDialog.Builder(this)
                     val edittext = EditText(this)
                     edittext.setSingleLine(true)
-                    builderinner.setTitle("新增分類名稱")
+                    builderinner.setTitle(getString(R.string.eneterCategoryName))
                     builderinner.setView(edittext)
 
-                    builderinner.setPositiveButton("確定",null)
-                    builderinner.setNegativeButton("取消",null)
+                    builderinner.setPositiveButton(getString(R.string.confirmButtonText),null)
+                    builderinner.setNegativeButton(getString(R.string.negativeButtonText),null)
 
                     val alertdialog=builderinner.show()
                     val confirm=alertdialog.getButton(AlertDialog.BUTTON_POSITIVE)
                     confirm.setOnClickListener {
                         if(TextUtils.isEmpty(edittext.text.toString().trim())) {
                             //edittext.error="請輸入分類名稱"
-                            Toast.makeText(this, "請輸入分類名稱", Toast.LENGTH_LONG).show()
+                            Toast.makeText(this, getString(R.string.pleaseEnterCategoryName), Toast.LENGTH_LONG).show()
                         }
                         else {
                             val newcategory = edittext.text.toString()
@@ -500,7 +501,7 @@ class ItemActivity : AppCompatActivity(){
 
             //檢查事件過期與否，過期向使用者說明並不會發出提醒(註銷時間比註冊時間早)
             if(eventDate.timeInMillis-23L*60L*60L*1000L<=calendar.timeInMillis){
-                Toast.makeText(this,"過期事件無法設置提醒",Toast.LENGTH_LONG).show()
+                Toast.makeText(this,getString(R.string.notAvailableForPastEvent),Toast.LENGTH_LONG).show()
                 switch_reminder.isChecked=false
                 reminder_interval.isClickable=false
                 reminder_time.isClickable=false
@@ -543,7 +544,7 @@ class ItemActivity : AppCompatActivity(){
                 }
             }
             else{
-                Toast.makeText(this,"No camera detected in this device!",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this,getString(R.string.noCameraDetected),Toast.LENGTH_SHORT).show()
             }
         }
         //相簿鍵
@@ -583,7 +584,7 @@ class ItemActivity : AppCompatActivity(){
             val uri = data.data
             val bitmap = MediaStore.Images.Media.getBitmap(resolver, uri)
             if(bitmap==null){//選擇了不是image類別檔案
-                Toast.makeText(this,"Not supported image datatype!",Toast.LENGTH_LONG).show()
+                Toast.makeText(this,getString(R.string.notSupportedImageDatatype),Toast.LENGTH_LONG).show()
             }
             else {
                 //壓縮
@@ -682,7 +683,7 @@ private fun showIconsCollection(){
     gridView.adapter = ImageAdapter(this,icons_array)
 
     builder.setView(view_icons)
-    builder.setTitle("圖示集")
+    builder.setTitle(getString(R.string.iconCollection))
     val icon_dialog=builder.show()
 
     gridView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->

@@ -98,9 +98,9 @@ class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
                 -1,0,1,2,3,4->{}
                 5->{
                     val builder = AlertDialog.Builder(this)
-                    builder.setTitle("刪除分類")
-                    builder.setMessage("所有在此分類的項目將被歸回未分類中")
-                    builder.setPositiveButton( "確定",  {
+                    builder.setTitle(getString(R.string.deleteCategory))
+                    builder.setMessage(getString(R.string.allItemBecomeUnsorted))
+                    builder.setPositiveButton( getString(R.string.confirmButtonText),  {
                         dialogInterface, i ->
 
                         stored_category.removeAt(5)
@@ -124,7 +124,7 @@ class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
                         startActivity(intent)
                         finish()
                     })
-                    builder.setNegativeButton( "取消",  {dialogInterface, i ->    })
+                    builder.setNegativeButton( getString(R.string.negativeButtonText),  {dialogInterface, i ->    })
 
                     val alert=builder.create()
                     alert.show()
@@ -132,9 +132,9 @@ class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
                 }
                 6->{
                     val builder = AlertDialog.Builder(this)
-                    builder.setTitle("刪除分類")
-                    builder.setMessage("所有在此分類的項目將被歸回未分類中")
-                    builder.setPositiveButton( "確定",  {
+                    builder.setTitle(getString(R.string.deleteCategory))
+                    builder.setMessage(getString(R.string.allItemBecomeUnsorted))
+                    builder.setPositiveButton( getString(R.string.confirmButtonText),  {
                         dialogInterface, i ->
 
                         stored_category.removeAt(6)
@@ -154,7 +154,7 @@ class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
                         startActivity(intent)
                         finish()
                     })
-                    builder.setNegativeButton( "取消",  {dialogInterface, i ->    })
+                    builder.setNegativeButton( getString(R.string.negativeButtonText),  {dialogInterface, i ->    })
 
                     val alert=builder.create()
                     alert.show()
@@ -162,9 +162,9 @@ class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
                 }
                 7->{
                     val builder = AlertDialog.Builder(this)
-                    builder.setTitle("刪除分類")
-                    builder.setMessage("所有在此分類的項目將被歸回未分類中")
-                    builder.setPositiveButton( "確定",  {
+                    builder.setTitle(getString(R.string.deleteCategory))
+                    builder.setMessage(getString(R.string.allItemBecomeUnsorted))
+                    builder.setPositiveButton( getString(R.string.confirmButtonText),  {
                         dialogInterface, i ->
 
                         stored_category.removeAt(7)
@@ -178,7 +178,7 @@ class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
                         startActivity(intent)
                         finish()
                     })
-                    builder.setNegativeButton( "取消",  {dialogInterface, i ->    })
+                    builder.setNegativeButton(  getString(R.string.negativeButtonText),  {dialogInterface, i ->    })
 
                     val alert=builder.create()
                     alert.show()
@@ -213,7 +213,7 @@ class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
             itemDAO.createSampleData()
         }
 
-        myadapter=myAdapter(mydata,gridlayoutmanager,recyclerview,itemDAO) { position:Int->
+        myadapter=myAdapter(mydata,gridlayoutmanager,recyclerview,itemDAO,this) { position:Int->
             Log.e("clicklistener", "Clicked on item $position")
             itemClickHandler(position)
         }
@@ -305,7 +305,7 @@ class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
                 mydata.clear()
                 mydata.addAll(itemDAO.all)
                 myadapter.notifyDataSetChanged()
-                title="countdown"
+                title=getString(R.string.app_name)
                 custom_category=false
                 categroy_now=-1
             }
@@ -314,7 +314,7 @@ class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
                 mydata.clear()
                 mydata.addAll(itemDAO.category(0))
                 myadapter.notifyDataSetChanged()
-                title="未分類"
+                title=getString(R.string.unsorted)
                 custom_category=false
                 categroy_now=0
             }
@@ -323,16 +323,17 @@ class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
                 mydata.clear()
                 mydata.addAll(itemDAO.category(1))
                 myadapter.notifyDataSetChanged()
-                title="生活"
+                title=getString(R.string.life)
                 custom_category=false
                 categroy_now=1
+
             }
             R.id.category2->{
 
                 mydata.clear()
                 mydata.addAll(itemDAO.category(2))
                 myadapter.notifyDataSetChanged()
-                title="工作"
+                title=getString(R.string.work)
                 custom_category=false
                 categroy_now=2
             }
@@ -341,7 +342,7 @@ class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
                 mydata.clear()
                 mydata.addAll(itemDAO.category(3))
                 myadapter.notifyDataSetChanged()
-                title="考試"
+                title=getString(R.string.exam)
                 custom_category=false
                 categroy_now=3
             }
@@ -350,7 +351,7 @@ class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
                 mydata.clear()
                 mydata.addAll(itemDAO.category(4))
                 myadapter.notifyDataSetChanged()
-                title="紀念日"
+                title=getString(R.string.anniversary)
                 custom_category=false
                 categroy_now=4
             }
@@ -403,6 +404,9 @@ class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
             }
 
         }
+        //沒項目的話顯示告示
+        if (mydata.size==0){noItemNotice.visibility=View.VISIBLE}
+        else{noItemNotice.visibility=View.INVISIBLE}
         //再生成一次actionbar  決定刪除分類鍵可不可見
         invalidateOptionsMenu()
         //menuItem.isChecked = true
@@ -553,16 +557,16 @@ class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
         edittext.setSingleLine(true)
         edittext.setText(stored_category[which])
         edittext.setSelection(edittext.text.length)
-        builder.setTitle("修改分類名稱")
+        builder.setTitle(getString(R.string.editCategoryName))
         builder.setView(edittext)
 
-        builder.setPositiveButton("確定",null)
-        builder.setNegativeButton("取消",null)
+        builder.setPositiveButton(getString(R.string.confirmButtonText),null)
+        builder.setNegativeButton( getString(R.string.negativeButtonText),null)
         val alertdialog=builder.show()
         val confirm=alertdialog.getButton(AlertDialog.BUTTON_POSITIVE)
         confirm.setOnClickListener {
             if(TextUtils.isEmpty(edittext.text.toString().trim())) {
-                Toast.makeText(this, "請輸入分類名稱", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.pleaseEnterCategoryName), Toast.LENGTH_LONG).show()
             }
             else {
                 stored_category[which]=edittext.text.toString()

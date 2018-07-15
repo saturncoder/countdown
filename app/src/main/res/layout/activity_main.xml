@@ -20,6 +20,20 @@
 
         </android.support.v7.widget.RecyclerView>
 
+        <TextView
+            android:id="@+id/noItemNotice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:drawablePadding="16dp"
+            android:drawableTop="@drawable/app_icon"
+            android:gravity="center"
+            android:lineSpacingMultiplier="1.5"
+            android:padding="8dp"
+            android:text="@string/noItemNotice"
+            android:textSize="22sp"
+            android:visibility="visible" />
+
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/FAB_additem"
             android:layout_width="wrap_content"

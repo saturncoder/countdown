@@ -55,4 +55,5 @@
     <color name="skinPrimary">#f98866</color>
     <color name="skinPrimaryDark">#ff7349</color>
     <color name="skinAccent">#80BD9E</color>
+    <color name="WG11bg">#8dd18800</color>
 </resources>

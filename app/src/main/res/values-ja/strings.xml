@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">countdown</string>
+    <string name="app_name">カウソト ダウソ</string>
     <string name="enterTitle">タイトル</string>
     <string name="defaultDaysLeft">0 日</string>
     <string name="memo">メモ</string>
@@ -15,4 +15,46 @@
     <string name="left">残り：</string>
     <string name="day_unit">日</string>
     <string name="left_en">" "</string>
+    <string name="chooseTheme">テーマ：</string>
+    <string name="theme">テーマ</string>
+    <string name="about">情報</string>
+    <string name="category">カテゴリー</string>
+    <string name="unsorted">未分類</string>
+    <string name="pickAdate">日付を選ぶ</string>
+    <string name="notification">通知</string>
+    <string name="coder">作者：saturncoder</string>
+    <string name="pleaseRate">五つ星評価をください</string>
+    <string name="version">バージョン：1.0.0</string>
+    <string name="daysleftSentence">%1$n 日 %2$s</string>
+    <string name="pleaseTypeTitle">タイトルをご入力ください！</string>
+    <string name="notAvailableForPastEvent">期間が切れたイベントの通知は無効になる</string>
+    <string name="noCameraDetected">このデバイスでカメラが検出されませんでした</string>
+    <string name="notSupportedImageDatatype">イメージタイプタイプが不正です</string>
+    <string name="pleaseChooseDate">日付をご指定ください</string>
+    <string name="chooseNotifTime">通知時間をご指定ください</string>
+    <string name="chooseNotifFreq">通知頻度</string>
+    <string name="confirmButtonText">OK</string>
+    <string name="negativeButtonText">キャンセル</string>
+    <string name="chooseCategory">カテゴリー</string>
+    <string name="addaCategory">新カテゴリーを作成する</string>
+    <string name="onlyThreeCategoryAllowed">カスタムカテゴリーは最大三つまで作成できます</string>
+    <string name="errorNotification">お知らせ</string>
+    <string name="eneterCategoryName">カテゴリー名</string>
+    <string name="pleaseEnterCategoryName">カテゴリー名をご入力ください</string>
+    <string name="iconCollection">アイコン集</string>
+    <string name="deleteCategory">カテゴリーを削除する</string>
+    <string name="allItemBecomeUnsorted">この中のアイテムが全部「未分類」に分けます。</string>
+    <string name="editCategoryName">新カテゴリー名</string>
+    <string name="undo">元に戻す</string>
+    <string name="itemRemoved">アイテムを削除しました</string>
+    <string name="noItemNotice">このカテゴリーにはアイテムがありません。\n一つを作りませんか？</string>
+    <string name="monday">月曜日</string>
+    <string name="tuesday">火曜日</string>
+    <string name="wednesday">水曜日</string>
+    <string name="thursday">木曜日</string>
+    <string name="friday">金曜日</string>
+    <string name="saturday">土曜日</string>
+    <string name="sunday">日曜日</string>
+    <string name="mon2fri">月曜から金曜まで</string>
+    <string name="customDays">カスタム</string>
 </resources>

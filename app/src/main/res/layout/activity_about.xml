@@ -38,7 +38,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="作者：saturncoder"
+        android:text="@string/coder"
         android:textColor="@android:color/black"
         android:textSize="18sp" />
 
@@ -48,22 +48,23 @@
         android:layout_gravity="center_horizontal"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="Version：1.0.0"
+        android:text="@string/version"
         android:textColor="@android:color/black"
         android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/rateButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:drawableLeft="@drawable/ic_thumb_up_24dp"
+        android:text="@string/pleaseRate" />
 
     <View
         android:id="@+id/view3"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="5" />
-
-    <Button
-        android:id="@+id/rateButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/ic_thumb_up_24dp"
-        android:text="給予五星鼓勵！" />
 
 
 </LinearLayout>
